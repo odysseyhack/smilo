@@ -44,7 +44,7 @@ export class ContractProvider {
         let unlock = await this.web3.eth.personal.unlockAccount(
             publicKey, 
             privateKey, 
-            200
+            20000
         );
         console.log("Unlocked account: " + unlock + " on " + this.walletProvider.getPublicKey());
     }
@@ -61,7 +61,6 @@ export class ContractProvider {
         let checkedIn = false;
 
         let flightpassContract = new this.web3.eth.Contract(abi);
-        let contractAddress = "";
         let deployment = flightpassContract.deploy(
             {
                 data: '0x' + bytecode,
@@ -86,7 +85,7 @@ export class ContractProvider {
             console.log(`Receipt after mining with contract address: ${receipt.contractAddress}`);
         }).then((newContractInstance) => {
             this.contractAddress = newContractInstance.options.address;
-            console.log("Deployed at address", contractAddress);
+            console.log(' this.contractAddress:', this.contractAddress);
         }).catch((error) => {
             console.log(error);
         });
@@ -96,8 +95,11 @@ export class ContractProvider {
     setVectors() {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
+        let vectors = "YO";
+        console.log('vectors:', vectors);
+        console.log('priv:', this.walletProvider.getPrivateKey());
         flightpassContract.methods.setVectors(
-            JSON.stringify(this.identityProvider.getIdentity().faceVectors)
+            vectors
         ).send({
             from: this.walletProvider.getPublicKey(),
             gas: '2000000'
@@ -112,10 +114,9 @@ export class ContractProvider {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
         flightpassContract.methods.getVectors().call({
-            gas: '2000000'
-        }, (error, result) => {
-            console.log('getVectors error:', error);
-            console.log('getVectors result:', result);
+            from: this.walletProvider.getPublicKey()
+        }).then((result) => {
+            console.log('getVectors:', result);
         });
     }
 }
