@@ -10,7 +10,8 @@ export class IdentityProvider {
         fullName: null,
         birthDate: null,
         nationality: null,
-        passport: null
+        passport: null,
+        faceVectors: null
     };
 
     constructor(
@@ -31,6 +32,12 @@ export class IdentityProvider {
 
     public setPassport(passport: string) {
         this.identity.passport = passport;
+
+        this.saveIdentity();
+    }
+
+    public setFaceVectors(faceVectors: {x: number, y: number}[]) {
+        this.identity.faceVectors = faceVectors;
 
         this.saveIdentity();
     }

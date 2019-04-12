@@ -5,4 +5,22 @@ page-check-in {
         font-size: 60px;
         color: #00A1DE;
     }
+
+    .video-container {
+        margin-top: 50px;
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        span {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        video {
+            width: 80%;
+        }
+    }
 }

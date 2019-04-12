@@ -48,6 +48,7 @@ import { TravelPageModule } from '../pages/travel/travel.module';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { AccountProvider } from '../providers/account-provider/account.provider';
 import { IdentityProvider } from '../providers/identity-provider/identity.provider';
+import { FaceVectorProvider } from '../providers/face-vector/face-vector.provider';
 
 @NgModule({
 	declarations: [
@@ -103,7 +104,8 @@ import { IdentityProvider } from '../providers/identity-provider/identity.provid
 		WalletProvider,
 		BookedFlightsProvider,
 		AccountProvider,
-		IdentityProvider
+		IdentityProvider,
+		FaceVectorProvider
 	]
 })
 export class AppModule {

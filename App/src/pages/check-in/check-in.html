@@ -1,5 +1,6 @@
 <ion-content padding>
 	<components-back-button></components-back-button>
+
 	<div class="klm-header-container">
 		<h1 class="klm-header">Check in</h1>
 	</div>
@@ -12,16 +13,20 @@
 			<p class="info-left">Travellers</p>
 		</div>
 		<div class="right-side-info-container">
-			<p class="info-right">KLM1234</p>
-			<p class="info-right">Amsterdam</p>
-			<p class="info-right">Barcelona</p>
-			<p class="info-right">12/4/2019</p>
-			<p class="info-right">1 Adult</p>
+			<p class="info-right">{{ booking.flightId }}</p>
+			<p class="info-right">{{ booking.from }}</p>
+			<p class="info-right">{{ booking.to }}</p>
+			<p class="info-right">{{ booking.date | date:'dd/MM/yyyy' }}</p>
+			<p class="info-right">{{ booking.travellers }}</p>
 		</div>
 	</div>
-	<ion-icon name="camera" (click)="takePhoto()" class="check-in-icon"></ion-icon>
-	<div class="klm-button-container">
-		<button class="klm-button" (click)="processCheckIn()">Check In</button>
+
+	<div class="video-container" *ngIf="!faceScan">
+		<span>We are scanning your face. Hang on...</span>
+		
+		<video autoplay width="300" height="400" #videoplayer></video>
+
+		<ion-spinner></ion-spinner>
 	</div>
 </ion-content>
 	

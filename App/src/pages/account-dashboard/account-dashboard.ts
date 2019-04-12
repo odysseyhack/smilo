@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BookFlightPage } from '../book-flight/book-flight';
 import { CheckInPage } from '../check-in/check-in';
 import { AccountProvider } from '../../providers/account-provider/account.provider';
+import { BookedFlightsProvider } from '../../providers/booked-flights-provider/booked-flights-provider';
 
 @IonicPage()
 @Component({
@@ -15,7 +16,8 @@ export class AccountDashboardPage {
 
 	constructor(
 		private navCtrl: NavController, 
-		private accountProvider: AccountProvider
+		private accountProvider: AccountProvider,
+		private bookedFlightsProvider: BookedFlightsProvider
 	) {
 	}
 
@@ -29,5 +31,11 @@ export class AccountDashboardPage {
 
 	goToCheckIn(): void {
 		this.navCtrl.push(CheckInPage);
+	}
+
+	needsToCheckIn(): boolean {
+		let booking = this.bookedFlightsProvider.getBookedFlights()[0];
+
+		return booking && !booking.checkedIn;
 	}
 }

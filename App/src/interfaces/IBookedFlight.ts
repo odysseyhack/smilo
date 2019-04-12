@@ -5,4 +5,5 @@ export interface IBookedFlight {
     travellers: string;
     flightId: string;
     smartContractAddress: string;
+    checkedIn?: boolean;
 }
