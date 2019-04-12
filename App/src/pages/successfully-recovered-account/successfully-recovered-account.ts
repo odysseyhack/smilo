@@ -14,7 +14,7 @@ export class SuccessfullyRecoveredAccountPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad SuccessfullyRecoveredAccountPage');
+
 	}
 
 	goToUnlockKeystorePage(): void {

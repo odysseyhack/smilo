@@ -48,7 +48,6 @@ export class WalletProvider implements IWalletProvider {
     }
 
     unlockKeystore(password: string): void {
-        console.log('Unlock:', password);
         let account = this.web3Eth.privateKeyToAccount(this.getPrivateKey(password));
         this.publicKey = account.address;
     }

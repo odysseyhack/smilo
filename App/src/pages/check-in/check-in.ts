@@ -14,7 +14,7 @@ export class CheckInPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad CheckInPage');
+
 	}
 
 	processCheckIn(): void {

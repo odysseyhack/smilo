@@ -14,7 +14,7 @@ export class EPassportCreatedPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad EPassportCreatedPage');
+
 	}
 
 	goToUnlockKeystorePage(): void {
