@@ -1,0 +1,11 @@
+---
+# core.yml
+- hosts: nodes
+  pre_tasks:
+    - include_vars: "../vars/{{ env }}.yml"
+      tags:
+        - always
+  roles:
+    - blackbox
+    - fullnode
+    - update

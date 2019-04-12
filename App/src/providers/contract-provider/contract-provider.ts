@@ -74,7 +74,7 @@ export class ContractProvider {
             }
         ).send({
             from: this.walletProvider.getPublicKey(),
-            gas: '2000000',
+            gas: '4000000',
             gasPrice: '0',
             sharedWith: this.sharedWith
         }).on('error', (error) => {
@@ -102,11 +102,14 @@ export class ContractProvider {
             vectors
         ).send({
             from: this.walletProvider.getPublicKey(),
-            gas: '2000000'
+            gas: '2000000',
+            gasPrice: '0',
+            sharedWith: this.sharedWith
         }, (error, result) => {
             console.log('setVectors error:', error);
             console.log('setVectors result:', result);
             this.getVectors();
+            this.getName();
         });
     }
 
@@ -115,8 +118,19 @@ export class ContractProvider {
         flightpassContract.options.address = this.contractAddress;
         flightpassContract.methods.getVectors().call({
             from: this.walletProvider.getPublicKey()
-        }).then((result) => {
-            console.log('getVectors:', result);
+        }).then(function() {
+            console.log(arguments);
+        });
+    }
+
+    getName() {
+        let flightpassContract = new this.web3.eth.Contract(abi);
+        flightpassContract.options.address = this.contractAddress;
+        flightpassContract.methods.getName().call({
+            from: this.walletProvider.getPublicKey()
+        }).then(function() {
+            console.log("getName");
+            console.log(arguments);
         });
     }
 }

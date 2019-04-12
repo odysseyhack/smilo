@@ -1,0 +1,97 @@
+---
+# file: roles/blackbox/tasks/main.yml
+
+- name: Alter the login message when a user logs in into the machine
+  lineinfile:
+    dest: "/etc/issue.net"
+    line: "THIS NODE CONTAINS A BLACKBOX!"
+    state: present
+
+- name: Create Smilo bin directory ...
+  file:
+    path: "{{ smilo_base_dir }}/{{ item }}"
+    state: directory
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+  with_items:
+    - bin
+    - keys
+
+- name: Create Smilo data directory ...
+  file:
+    path: "{{ smilo_base_dir }}/data"
+    state: directory
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+
+- name: Create blackbox log files ...
+  file:
+    path: "/var/log/{{ item }}"
+    state: touch
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0600
+  with_items:
+    - blackbox.log
+
+- name: download blackbox
+  get_url:
+    url: "{{blackbox_url}}"
+    dest: "{{ smilo_base_dir }}/bin/blackbox"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+    force: yes
+
+- name: Check if Keys exist
+  stat:
+    path: "{{ smilo_base_dir }}/keys/blackbox.key"
+  register: keys
+
+- name: Create blackbox keys
+  command: "./bin/blackbox --generate-keys blackbox"
+  args:
+    chdir: "{{ smilo_base_dir }}/"
+  when: keys.stat.exists == false
+
+- name: install blackbox init.d file
+  template:
+    src: blackbox.j2
+    dest: /etc/init.d/blackbox
+    owner: root
+    group: root
+    mode: 0755
+
+- name: install blackbox config file
+  template:
+    src: blackbox-config.j2
+    dest: "{{ smilo_base_dir }}/data/blackbox-config.json"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0600
+
+- name: Make sure the file permissions are correct.
+  file:
+    path: "{{ smilo_base_dir }}"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    recurse: yes
+
+- name: install blackbox init.d file
+  command: chkconfig --add blackbox
+
+- name: Boot blackbox on startup
+  command: chkconfig blackbox on
+
+- name: start blackbox
+  service:
+    name: blackbox
+    state: restarted
+    enabled: yes
+
+- name: Wait until {{ smilo_base_dir }}/data/blackbox.ipc is present before continuing
+  wait_for:
+    path: "{{ smilo_base_dir }}/data/blackbox.ipc"
+    delay: 5

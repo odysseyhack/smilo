@@ -1,0 +1,271 @@
+---
+# file: roles/common/tasks/main.yml
+
+- name: Ensure java-1.7.0 is not installed
+  yum:
+    name: java-1.7.0
+    state: absent
+
+- name: Make sure that java is installed
+  become: yes
+  yum:
+    name: java-1.8.0
+    state: latest
+
+- name: Make sure that all packages are updated to the latest versions
+  become: yes
+  yum:
+    name: '*'
+    state: latest
+
+- name: Alter the login message when a user logs in into the machine
+  copy:
+    dest: "/etc/issue.net"
+    content: "{{ issue }}"
+
+- name: Create admin users
+  user:
+    name: "{{ item.name }}"
+    state: present
+    groups: "{{ item.groups | default('wheel') }}"
+  with_items: "{{ admin_users }}"
+  when: admin_users is defined
+
+- name: Alter prompt for the users
+  lineinfile:
+    destfile: "/etc/bashrc"
+    line: '{{ PS1 }}'
+
+- name: Add authorized_keys to the admin users
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.key }}"
+    # exclusive is not loop-aware, must put multiple all in one variable
+    exclusive: yes
+  with_items:
+    "{{ admin_users }}"
+  when: admin_users is defined
+
+- name: Remove the ssl.conf
+  file:
+    path: /etc/httpd/conf.d/ssl.conf
+    state: absent
+
+- name: Disable /dev/random for java
+  lineinfile:
+    destfile: /usr/lib/jvm/jre/lib/security/java.security
+    line: securerandom.source=file:/dev/random
+    state: absent
+
+- name: Enable /dev/urandom for java
+  lineinfile:
+    destfile: /usr/lib/jvm/jre/lib/security/java.security
+    line: securerandom.source=file:/dev/urandom
+    state: present
+
+- name: Ensure NTP-related packages are installed.
+  package:
+    name: ntp
+    state: present
+
+- name: Enable npt services for automatic start
+  service:
+    name: ntpd
+    enabled: yes
+    state: started
+
+- name: ensure grub.conf exists
+  copy:
+    content: ""
+    dest: /etc/grub.conf
+    force: no
+    group: root
+    owner: root
+    mode: 400
+
+# From https://highon.coffee/blog/security-harden-centos-7/
+- name: Securing root Logins
+  lineinfile:
+    destfile: /etc/securetty
+    line: 'tty1'
+
+- name: Securing root Logins
+  file:
+    path: /root
+    mode: 0700
+
+- name: Deny all TCP wrappers but SSH
+  lineinfile:
+    destfile: "{{ item.file }}"
+    line: "{{ item.line }}"
+  with_items:
+  - { file: /etc/hosts.deny, line: "ALL:ALL" }
+  - { file: /etc/hosts.allow, line: "sshd:ALL" }
+
+- name: Ensure Rsyslog is installed
+  package:
+    name: rsyslog
+    state: present
+
+- name: Enable Rsyslog
+  service:
+    name: rsyslog
+    enabled: yes
+    state: started
+
+- name: Give sudo access without password for wheel group
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel  ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Remove require tty
+  lineinfile:
+    regexp: '^\s+\w+\s+requiretty'
+    dest: /etc/sudoers
+    state: absent
+
+- name: Remove require tty - alt
+  lineinfile:
+    regexp: "requiretty"
+    dest: /etc/sudoers.d/os_defaults
+    state: absent
+
+- name: Remove require tty - alt2
+  lineinfile:
+    regexp: '^Defaults\s+requiretty'
+    dest: /etc/sudoers
+    state: absent
+
+- name: Clean yum cache
+  command: "{{ item }}"
+  args:
+    warn: false
+  with_items:
+    - sync
+    - yum clean all
+
+##
+# Change auditd settings to prevent shutdown -h at disk full
+# -- most likely a deviation from CIS - log shipping should solve this permanently
+##
+- name: Secure auditd
+  lineinfile:
+    dest: /etc/audit/auditd.conf
+    regexp: "^max_log_file_action ="
+    line: "max_log_file_action = rotate"
+    state: present
+
+- name: Add utf to environment
+  lineinfile:
+    path: /etc/environment
+    line: "{{ item.line }}"
+  with_items:
+    - { line: "LANG=en_US.utf-8" }
+    - { line: "LC_ALL=en_US.utf-8" }
+
+- name: Create Smilo group
+  group:
+    name: "{{ smilo_group }}"
+    state: present
+
+- name: Create Smilo user
+  user:
+    name: "{{ smilo_user }}"
+    comment: "Smilo application user"
+    group: "{{ smilo_group }}"
+
+- name: Create Smilo directories ...
+  file:
+    path: "{{ smilo_base_dir }}"
+    state: directory
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+
+- name: Create KLM directories ...
+  file:
+    path: "{{ klm_base_dir }}"
+    state: directory
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+
+- name: Make sure that all tools are installed
+  become: yes
+  yum:
+    name:
+      - docker
+      - python2-pip
+    state: present
+
+- name: Install docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Linux-x86_64
+    dest: /usr/bin/docker-compose
+    mode: 0755
+
+- name: Install awscli
+  pip:
+    name: awscli
+
+- name: Create symbolic links
+  file:
+    src: "/usr/local/bin/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    force: yes
+    follow: false
+    state: link
+  with_items:
+    - pip
+
+- name: Create docker group
+  group:
+    name: "docker"
+    state: present
+
+- name: add user "{{ smilo_user }}" to docker group
+  user:
+    name: "{{ smilo_user }}"
+    groups: docker
+    append: yes
+
+- name: add ec2-user to docker group
+  user:
+    name: "ec2-user"
+    groups: docker
+    append: yes
+
+- name: Start service docker, if not started
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Create AWS directories ...
+  file:
+    path: "~/.aws"
+    state: directory
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+  become: true
+  become_method: su
+  become_user: "{{ smilo_user }}"
+
+- name: Install aws config
+  copy:
+    src: "{{ vault_dir }}/aws-{{ item }}.j2.enc"
+    dest: "~/.aws/{{ item }}"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0600
+    decrypt: yes
+  become: true
+  become_method: su
+  become_user: "{{ smilo_user }}"
+  with_items:
+    - config
+    - credentials

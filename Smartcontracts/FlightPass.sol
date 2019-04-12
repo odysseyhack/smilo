@@ -114,7 +114,6 @@ contract FlightPass {
     
     /**
      * Set address trustee to false
-     * Todo: clean up untrusted addresses
      * @return true if success
      */
     function delTrusted(address trustedAddress) public onlyOwner returns (bool) {

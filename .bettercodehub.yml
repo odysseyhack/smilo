@@ -1,6 +1,6 @@
 component_depth: 2
 languages:
-- solidity
 - typescript
 exclude:
-- /Deploymentscripts
+- /Deploymentscripts/
+- /Smartcontracts/

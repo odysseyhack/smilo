@@ -8,7 +8,8 @@
     "start": "ionic-app-scripts serve",
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
-    "lint": "ionic-app-scripts lint"
+    "lint": "ionic-app-scripts lint",
+    "test": "ts-node --project spec/tsconfig.json node_modules/jasmine/bin/jasmine"
   },
   "dependencies": {
     "@angular/animations": "5.2.11",
@@ -31,16 +32,19 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "@smilo-platform/smilo-commons-js-web": "^0.1.12",
     "@smilo-platform/web3-eth-accounts": "1.0.0-beta.37",
+    "@types/jasmine": "^3.3.12",
     "angular2-qrscanner": "^1.0.7",
     "http": "0.0.0",
     "face-api.js": "^0.19.0",
     "ionic-angular": "3.9.3",
     "ionicons": "3.0.0",
+    "jasmine": "^3.4.0",
     "ngx-qrcode2": "0.0.9",
     "node-forge": "^0.7.6",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
     "web3": "1.0.0-beta.37",
+    "ts-node": "^8.0.3",
     "zone.js": "0.8.29"
   },
   "devDependencies": {
