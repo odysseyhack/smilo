@@ -14,7 +14,7 @@ export class CreateEPassportPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad CreateEPassportPage');
+
 	}
 
 	goToEPassportCreatedPage() {

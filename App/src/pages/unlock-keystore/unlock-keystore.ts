@@ -20,7 +20,7 @@ export class UnlockKeystorePage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad UnlockKeystorePage');
+
 	}
 
 	goToAccountDashboardPage() {

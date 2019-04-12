@@ -17,7 +17,7 @@ export class CreateEIdentityPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad CreateEIdentityPage');
+
 	}
 
 	goToEIdentityCreatedPage() {

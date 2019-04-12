@@ -14,7 +14,7 @@ export class EIdentityCreatedPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad EIdentityCreatedPage');
+
 	}
 
 	goToCreateEPassPort(): void {

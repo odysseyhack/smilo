@@ -14,7 +14,7 @@ export class CheckInSuccessPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad CheckInSuccessPage');
+
 	}
 
 	goToAccountDashboardPage(): void {

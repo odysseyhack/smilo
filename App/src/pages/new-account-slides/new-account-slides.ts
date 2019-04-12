@@ -14,7 +14,7 @@ export class NewAccountSlidesPage {
 	}
 
 	ionViewDidEnter() {
-		console.log('ionViewDidLoad NewAccountSlidesPage');
+
 	}
 
 	goToCreateEIdentityPage(): void {

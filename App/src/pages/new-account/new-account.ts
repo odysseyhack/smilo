@@ -20,11 +20,10 @@ export class NewAccountPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad NewAccountPage');
+
 	}
 
 	createKeyStore() {
-		console.log('Keystore pw:', this.password);
 		try {
 			this.walletProvider.createNewKeystore(this.password);
 			this.navCtrl.push(NewAccountSlidesPage);

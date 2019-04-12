@@ -22,7 +22,7 @@ export class TravelPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad TravelPage');
+
 	}
 
 	goBack(): void {
