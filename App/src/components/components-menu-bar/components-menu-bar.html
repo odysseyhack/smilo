@@ -38,12 +38,12 @@
                 <p>Travels</p>
             </div>
         </div>
-        <div class="option sub" *ngFor="let flight of bookedFlights" (click)="goToTravelPage(flight)">
+        <div class="option sub" *ngIf="bookedFlight" (click)="goToTravelPage(bookedFlight)">
             <div class="image">
                 <img src="/assets/imgs/airplane-up.png" class="airplane-icon">
             </div>
             <div class="text">
-                <p>{{ flight.date | date: 'dd/MM/yyyy' }} - {{ flight.from }} -> {{ flight.to }}</p>
+                <p>{{ bookedFlight.date | date: 'dd/MM/yyyy' }} - {{ bookedFlight.from }} -> {{ bookedFlight.to }}</p>
             </div>
         </div>
         <div class="option">

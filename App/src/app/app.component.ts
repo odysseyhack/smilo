@@ -9,11 +9,13 @@ import { UnlockKeystorePage } from '../pages/unlock-keystore/unlock-keystore';
 import { WalletProvider } from '../providers/wallet-provider/wallet-provider';
 import { AccountProvider } from '../providers/account-provider/account.provider';
 import { IdentityProvider } from '../providers/identity-provider/identity.provider';
+import { BookedFlightsProvider } from '../providers/booked-flights-provider/booked-flights-provider';
+import { ContractProvider } from '../providers/contract-provider/contract-provider';
 @Component({
   	templateUrl: 'app.html'
 })
 export class KLMApp {
-	rootPage: any = NewAccountPage;
+	rootPage: any;
 
 	constructor(
         private platform: Platform, 
@@ -21,11 +23,14 @@ export class KLMApp {
         private splashScreen: SplashScreen,
         private accountProvider: AccountProvider,
         private walletProvider: WalletProvider,
-        private identityProvider: IdentityProvider
+        private identityProvider: IdentityProvider,
+        private bookedFlightsProvider: BookedFlightsProvider,
+        private contractProvider: ContractProvider
     ) {
-		this.platform.ready().then(() => {
+		this.platform.ready().then(async () => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
+
             if (this.accountProvider.accountExists()) {
                 this.rootPage = UnlockKeystorePage;
             } else {

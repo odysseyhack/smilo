@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import * as Smilo from "@smilo-platform/smilo-commons-js-web";
 import Web3Eth from "@smilo-platform/web3-eth-accounts";
 import { AccountProvider } from "../account-provider/account.provider";
@@ -19,6 +19,8 @@ export class WalletProvider implements IWalletProvider {
     private privateKey: string;
     private web3Eth: Web3Eth;
 
+    private walletUnlock: EventEmitter<void> = new EventEmitter();
+
     constructor(private accountProvider: AccountProvider) {
         this.web3Eth = new Web3Eth();
 
@@ -35,12 +37,18 @@ export class WalletProvider implements IWalletProvider {
         this.save();
     }
 
+    onWalletUnlocked() {
+        return this.walletUnlock.asObservable();
+    }
+
     private restoreWallet(): void {
         this.privateKey = this.accountProvider.decryptFromStorage(KEY_STORE_STORAGE_KEY);
         // this.privateKey = "0000000000000000000000000000000000000000000000000073656372657430";
         if(this.privateKey) {
             let account = this.web3Eth.privateKeyToAccount(this.privateKey);
             this.publicKey = account.address;
+
+            this.walletUnlock.emit();
         }
     }
 

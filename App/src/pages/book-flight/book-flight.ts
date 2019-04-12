@@ -44,9 +44,6 @@ export class BookFlightPage {
 		this.setToAndFromCity();
 		this.setDate();
 		this.setTravelers();
-		await this.contractProvider.connectToWeb3Provider();
-		await this.contractProvider.registerAccount();
-		await this.contractProvider.unlockAccount();
 		this.initializeComplete = true;
 	}
 
@@ -87,7 +84,7 @@ export class BookFlightPage {
 		}
 		this.contractProvider.deployContract(bookedFlight);
 	
-		this.bookedFlightsProvider.addToBookedFlights(bookedFlight);
+		this.bookedFlightsProvider.setBookedFlight(bookedFlight);
 		this.navCtrl.push(BookSuccessPage, {bookedFlight: bookedFlight});
 	}
 

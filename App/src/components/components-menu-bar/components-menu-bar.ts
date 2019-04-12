@@ -9,7 +9,7 @@ import { TravelPage } from '../../pages/travel/travel';
     templateUrl: 'components-menu-bar.html'
 })
 export class ComponentsMenuBarComponent {
-    bookedFlights: IBookedFlight[] = [];
+    bookedFlight: IBookedFlight;
 
     @Output() 
     shownChange: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -27,10 +27,7 @@ export class ComponentsMenuBarComponent {
     constructor(private element: ElementRef,
                 private navController: NavController,
 				private bookedFlightsProvider: BookedFlightsProvider) {
-        this.bookedFlights = this.bookedFlightsProvider.getBookedFlights();
-        this.bookedFlights.sort((a,b) => {
-            return a.date.getTime() - b.date.getTime();
-        });
+        this.bookedFlight = this.bookedFlightsProvider.getBookedFlight();
     }
 
     goToTravelPage(bookedFlight: IBookedFlight): void {

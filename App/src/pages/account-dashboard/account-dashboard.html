@@ -5,9 +5,26 @@
     <div class="klm-logo-container">
         <img src="/assets/imgs/klm-logo-blue.png" alt="KLM">
     </div>
+    
     <p class="username">Welcome {{ accountName }}</p>
+
+    <div class="active-flight" *ngIf="bookedFlight">
+        <p>Your booked flight from <b>{{ bookedFlight.from }}</b> to <b>{{ bookedFlight.to }}</b>
+        will depart at {{ bookedFlight.date | date:'dd/MM/yyyy' }}.</p>
+
+        <p>Your flight id is <b>{{ bookedFlight.flightId }}</b></p>
+
+        <p *ngIf="needsToCheckIn(); else noCheckInView">
+            <b>You still need to check in.</b>
+        </p>
+
+        <ng-template #noCheckInView>
+            You have already checked in.
+        </ng-template>
+    </div>
+
     <div class="klm-button-container">
-        <button class="klm-button" (click)="goToBookFlight()">Book flight</button>
+        <button class="klm-button" (click)="goToBookFlight()" *ngIf="!bookedFlight">Book flight</button>
         <button class="klm-button" (click)="goToCheckIn()" *ngIf="needsToCheckIn()">Check in</button>
     </div>
 </ion-content>

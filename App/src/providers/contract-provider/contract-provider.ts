@@ -6,6 +6,9 @@ import { abi, bytecode } from "../../smartcontracts/smartcontracts";
 import { IBookedFlight } from "../../interfaces/IBookedFlight";
 import { IdentityProvider } from "../identity-provider/identity.provider";
 import { ITrusted } from "../../interfaces/ITrusted";
+import { AccountProvider } from "../account-provider/account.provider";
+
+const CONTRACT_ADDRESS_KEY = "contract";
 
 @Injectable()
 export class ContractProvider {
@@ -13,17 +16,30 @@ export class ContractProvider {
     private contractAddress: string;
     private sharedWith = [ 'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=', 'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=', 'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=', 'ITWEZCbs3DGB4l0TZ1LbIJ2tBRGpizTmVvzksTZZTE4=', 'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' ];
 
-    constructor(private walletProvider: WalletProvider,
-                private identityProvider: IdentityProvider) {
-        
+    constructor(
+        private walletProvider: WalletProvider,
+        private identityProvider: IdentityProvider,
+        private accountProvider: AccountProvider
+    ) {
+        this.walletProvider.onWalletUnlocked().subscribe(
+            async () => {
+                await this.connectToWeb3Provider();
+                await this.registerAccount();
+                await this.unlockAccount();
+            }
+        );
+
+        this.accountProvider.onPasswordChanged().subscribe(
+            () => this.restore()
+        );
     }
 
     connectToWeb3Provider() {
         this.web3 = new Web3("http://node1.klm.smilo.network:22000");
-        console.log(this.web3);
     }
 
     async registerAccount() {
+        console.log("Unlcok web3 account");
         try {
             let privateKey = this.walletProvider.getPrivateKey().substring(2);
             console.log('getAccount with:', privateKey);
@@ -40,14 +56,11 @@ export class ContractProvider {
     async unlockAccount() {
         let publicKey = this.walletProvider.getPublicKey();
         let privateKey =  this.walletProvider.getPrivateKey().substring(2);
-        console.log('unlockAccount - publicKey', publicKey);
-        console.log('unlockAccount - privateKey', privateKey);
-        let unlock = await this.web3.eth.personal.unlockAccount(
+        return await this.web3.eth.personal.unlockAccount(
             publicKey, 
             privateKey, 
             20000
         );
-        console.log("Unlocked account: " + unlock + " on " + this.walletProvider.getPublicKey());
     }
 
     async deployContract(bookedFlight: IBookedFlight) {
@@ -56,13 +69,9 @@ export class ContractProvider {
         let identity = this.identityProvider.getIdentity();
         let name = identity.fullName;
         let passport = identity.passport;
-        if (!passport)
-            passport = "passport-test";
-        let vectors = "";
-        let checkedIn = false;
 
         let flightpassContract = new this.web3.eth.Contract(abi);
-        let deployment = flightpassContract.deploy(
+        flightpassContract.deploy(
             {
                 data: '0x' + bytecode,
                 arguments: [
@@ -86,11 +95,11 @@ export class ContractProvider {
             console.log(`Receipt after mining with contract address: ${receipt.contractAddress}`);
         }).then((newContractInstance) => {
             this.contractAddress = newContractInstance.options.address;
-            console.log(' this.contractAddress:', this.contractAddress);
+
+            this.save();
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         });
-        
     }
 
     async setVectors() {
@@ -99,38 +108,31 @@ export class ContractProvider {
         let vectors = "[" + this.identityProvider.getIdentity().faceVectors + "]";
         console.log('vectors:', vectors);
         console.log('priv:', this.walletProvider.getPrivateKey());
-        await flightpassContract.methods.setVectors(
+        return flightpassContract.methods.setVectors(
             vectors
         ).send({
             from: this.walletProvider.getPublicKey(),
             gas: '2000000',
             gasPrice: '0',
             sharedWith: this.sharedWith
-        }, (error, result) => {
-            console.log('setVectors error:', error);
-            console.log('setVectors result:', result);
-            this.getVectors();
-            this.getName();
         });
     }
 
-    getVectors() {
+    async getVectors() {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
-        flightpassContract.methods.getVectors().call({
+
+        return flightpassContract.methods.getVectors().call({
             from: this.walletProvider.getPublicKey()
-        }).then((vectors) => {
-            console.log('Vectors:', vectors);
         });
     }
 
-    getName() {
+    async getName() {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
-        flightpassContract.methods.getName().call({
+
+        return flightpassContract.methods.getName().call({
             from: this.walletProvider.getPublicKey()
-        }).then((name) => {
-            console.log('Name:', name);
         });
     }
 
@@ -152,5 +154,13 @@ export class ContractProvider {
             console.log('addTrusted error:', error);
             console.log('addTrusted result:', result);
         });
+    }
+
+    save() {
+        this.accountProvider.encryptToStorage(CONTRACT_ADDRESS_KEY, this.contractAddress);
+    }
+
+    restore() {
+        this.contractAddress = this.accountProvider.decryptFromStorage(CONTRACT_ADDRESS_KEY);
     }
 }
