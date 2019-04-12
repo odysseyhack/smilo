@@ -1,39 +1,31 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AccountDashboardPage } from '../account-dashboard/account-dashboard';
-import { WalletProvider } from '../../providers/wallet-provider/wallet-provider';
+import { AccountProvider } from '../../providers/account-provider/account.provider';
 
 @IonicPage()
 @Component({
-  selector: 'page-unlock-keystore',
-  templateUrl: 'unlock-keystore.html',
+	selector: 'page-unlock-keystore',
+	templateUrl: 'unlock-keystore.html',
 })
 export class UnlockKeystorePage {
 	password: string;
-    passwordError: string;
-    wrongPasswordText: string
+	passwordError: string;
+	wrongPasswordText: string
 
-	constructor(public navCtrl: NavController, 
-				public navParams: NavParams,
-				private walletProvider: WalletProvider) {
+	constructor(
+		private navCtrl: NavController,
+		private accountProvider: AccountProvider
+	) {
 
-	}
-
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad UnlockKeystorePage');
-	}
-
-	goToAccountDashboardPage() {
-		
 	}
 
 	unlockKeystore(): void {
-        try {
-            this.walletProvider.unlockKeystore(this.password);
-            this.passwordError = "";
+		if (this.accountProvider.isCorrectPassword(this.password)) {
+			this.accountProvider.setPassword(this.password);
 			this.navCtrl.push(AccountDashboardPage);
-        } catch(error) {
-            this.passwordError = "Incorrect password";
-        }       
-    }
+		} else {
+			this.passwordError = "Incorrect password";
+		}
+	}
 }

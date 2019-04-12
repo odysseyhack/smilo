@@ -15,6 +15,7 @@ export class BookFlightPage {
 	to: string;
 	date: Date;
 	travellers: string;
+	initializeComplete: boolean;
 	cities = [
 		"Amsterdam",
 		"Barcelona",
@@ -46,6 +47,7 @@ export class BookFlightPage {
 		await this.contractProvider.connectToWeb3Provider();
 		await this.contractProvider.registerAccount();
 		await this.contractProvider.unlockAccount();
+		this.initializeComplete = true;
 	}
 
 	setToAndFromCity() {
@@ -70,7 +72,7 @@ export class BookFlightPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad BookFlightPage');
+
 	}
 
 	processBookFlight(): void {

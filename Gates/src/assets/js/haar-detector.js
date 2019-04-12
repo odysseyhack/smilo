@@ -73,10 +73,6 @@ HAAR.Detector.prototype.computeGray=function(image)
 	this.gray=[];
 	this.img=[];
 	this.squares=[];
-	// image.width = 640;
-	// image.height = 480;
-	// console.log('image.width:', image.width);
-	// console.log('image.height', image.height);
 	var data=image.getContext('2d').getImageData(0,0,image.width,image.height);
 	this.width=data.width;
 	this.height=data.height;

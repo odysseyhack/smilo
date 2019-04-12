@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { NewAccountSlidesPage } from '../new-account-slides/new-account-slides';
 import { WalletProvider } from '../../providers/wallet-provider/wallet-provider';
+import { AccountProvider } from '../../providers/account-provider/account.provider';
+import { FaucetProvider } from '../../providers/faucet-provider/faucet-provider';
 
 @IonicPage()
 @Component({
@@ -9,24 +11,28 @@ import { WalletProvider } from '../../providers/wallet-provider/wallet-provider'
 	templateUrl: 'new-account.html',
 })
 export class NewAccountPage {
+	userName: string;
 	password: string;
 	passwordReEnter: string;
 	passwordInfo: string;
 
-	constructor(private navCtrl: NavController, 
-				private navParams: NavParams,
-				private walletProvider: WalletProvider) {
+	constructor(
+		private navCtrl: NavController, 
+		private walletProvider: WalletProvider,
+		private accountProvider: AccountProvider,
+		private faucetProvider: FaucetProvider
+	) {
 		
 	}
 
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad NewAccountPage');
-	}
-
-	createKeyStore() {
-		console.log('Keystore pw:', this.password);
+	async createKeyStore() {
+		this.accountProvider.setPassword(this.password);
+		this.accountProvider.setName(this.userName);
 		try {
-			this.walletProvider.createNewKeystore(this.password);
+			this.walletProvider.createNew();
+			console.log('Requesting funds:', this.walletProvider.getPublicKey());
+			let requestResult = await this.faucetProvider.requestFunds(this.walletProvider.getPublicKey());
+			console.log('requestFundsResult:', requestResult);
 			this.navCtrl.push(NewAccountSlidesPage);
 		} catch (error) {
 			console.error(error);

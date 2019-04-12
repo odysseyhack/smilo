@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BookFlightPage } from '../book-flight/book-flight';
 import { CheckInPage } from '../check-in/check-in';
+import { AccountProvider } from '../../providers/account-provider/account.provider';
 
 @IonicPage()
 @Component({
@@ -10,13 +11,16 @@ import { CheckInPage } from '../check-in/check-in';
 })
 export class AccountDashboardPage {
 	menuBarShown: boolean;
+	accountName: string;
 
-	constructor(private navCtrl: NavController, 
-				private navParams: NavParams) {
+	constructor(
+		private navCtrl: NavController, 
+		private accountProvider: AccountProvider
+	) {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad AccountDashboardPage');
+		this.accountName = this.accountProvider.getName();
 	}
 
 	goToBookFlight(): void {

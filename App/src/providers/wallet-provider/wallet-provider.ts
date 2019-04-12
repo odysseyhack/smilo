@@ -1,86 +1,71 @@
 import { Injectable } from "@angular/core";
 import * as Smilo from "@smilo-platform/smilo-commons-js-web";
-import { StorageProvider } from "../storage-provider/storage-provider";
 import Web3Eth from "@smilo-platform/web3-eth-accounts";
-import { EncryptionHelper } from "../../keystore/EncryptionHelper";
+import { AccountProvider } from "../account-provider/account.provider";
 
-export const KEY_STORE_STORAGE_KEY = "keystore";
+export const KEY_STORE_STORAGE_KEY = "wallet";
 
 export interface IWalletProvider {
-    createNewKeystore(password: string): void;
+    createNew(): void;
 
-    unlockKeystore(password: string): void;
+    restoreWallet(): void;
 
     reset(): void;
 
-    generateNewKeyStore(password: string): Smilo.IKeyStore;
-
-    saveKeystore(): void;
+    save(): void;
 
     getPublicKey(): string;
 
-    getPrivateKey(password: string): string;
+    getPrivateKey(): string;
 }
 
 @Injectable()
 export class WalletProvider implements IWalletProvider {
     private publicKey: string;
     private privateKey: string;
-    private encryptionHelper: EncryptionHelper;
-    private keyStore: Smilo.IKeyStore
     private web3Eth: Web3Eth;
 
-    constructor(private storageProvider: StorageProvider) {
-        this.encryptionHelper = new EncryptionHelper();
+    constructor(private accountProvider: AccountProvider) {
         this.web3Eth = new Web3Eth();
-        this.keyStore = this.storageProvider.readAsJSON(KEY_STORE_STORAGE_KEY);
+
+        this.accountProvider.onPasswordChanged().subscribe(
+            () => this.restoreWallet()
+        );
     }
 
-    keystoreExists(): boolean {
-        return !!this.keyStore;
+    createNew(): void {
+        this.generateNew();
+        this.save();
     }
 
-    createNewKeystore(password: string): void {
-        this.keyStore = this.generateNewKeyStore(password);
-        this.privateKey = this.encryptionHelper.decryptKeyStore(this.keyStore, password);
-        this.saveKeystore();
-    
-    }
-
-    unlockKeystore(password: string): void {
-        console.log('Unlock:', password);
-        let account = this.web3Eth.privateKeyToAccount(this.getPrivateKey(password));
-        this.publicKey = account.address;
+    restoreWallet(): void {
+        this.privateKey = this.accountProvider.decryptFromStorage(KEY_STORE_STORAGE_KEY);
+        if(this.privateKey) {
+            let account = this.web3Eth.privateKeyToAccount(this.privateKey);
+            this.publicKey = account.address;
+        }
     }
 
     reset(): void {
         this.publicKey = "";
         this.privateKey = "";
-        this.keyStore = null;
-        this.storageProvider.remove(KEY_STORE_STORAGE_KEY);
     }
 
-    generateNewKeyStore(password: string): Smilo.IKeyStore {
+    private generateNew() {
         let account = this.web3Eth.create();
         this.publicKey = account.address;
-        return this.encryptionHelper.createKeyStore(account.privateKey, password);
+        this.privateKey = account.privateKey;
     }
 
-    saveKeystore(): void {
-        this.storageProvider.write(KEY_STORE_STORAGE_KEY, JSON.stringify(this.keyStore));
+    save(): void {
+        this.accountProvider.encryptToStorage(KEY_STORE_STORAGE_KEY, this.privateKey);
     }
 
     getPublicKey(): string {
         return this.publicKey;
     }
 
-    getPrivateKey(password: string): string {
-        let privateKey = this.encryptionHelper.decryptKeyStore(this.keyStore, password);
-        this.privateKey = privateKey;
-        return privateKey;
-    }
-
-    getDecryptedPrivateKey(): string {
+    getPrivateKey(): string {
         return this.privateKey;
     }
 }

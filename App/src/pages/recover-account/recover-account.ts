@@ -14,7 +14,7 @@ export class RecoverAccountPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad RecoverAccountPage');
+
 	}
 
 	processImportAccount(): void {

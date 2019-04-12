@@ -4,13 +4,15 @@ import * as Web3 from "web3";
 import { WalletProvider } from "../wallet-provider/wallet-provider";
 import { abi, bytecode } from "../../smartcontracts/smartcontracts";
 import { IBookedFlight } from "../../interfaces/IBookedFlight";
+import { IdentityProvider } from "../identity-provider/identity.provider";
 
 @Injectable()
 export class ContractProvider {
     private web3: Web3;
     private sharedWith = [ 'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=', 'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=', 'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=', 'ITWEZCbs3DGB4l0TZ1LbIJ2tBRGpizTmVvzksTZZTE4=', 'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' ];
 
-    constructor(private walletProvider: WalletProvider) {
+    constructor(private walletProvider: WalletProvider,
+                private identityProvider: IdentityProvider) {
         
     }
 
@@ -21,7 +23,7 @@ export class ContractProvider {
 
     async registerAccount() {
         try {
-            let privateKey = this.walletProvider.getDecryptedPrivateKey().substring(2);
+            let privateKey = this.walletProvider.getPrivateKey().substring(2);
             console.log('getAccount with:', privateKey);
             let accountImport = await this.web3.eth.personal.importRawKey(
                     privateKey, 
@@ -35,7 +37,7 @@ export class ContractProvider {
 
     async unlockAccount() {
         let publicKey = this.walletProvider.getPublicKey();
-        let privateKey =  this.walletProvider.getDecryptedPrivateKey().substring(2);
+        let privateKey =  this.walletProvider.getPrivateKey().substring(2);
         console.log('unlockAccount - publicKey', publicKey);
         console.log('unlockAccount - privateKey', privateKey);
         let unlock = await this.web3.eth.personal.unlockAccount(
@@ -47,15 +49,24 @@ export class ContractProvider {
     }
 
     async deployContract(bookedFlight: IBookedFlight) {
-        let ticket = bookedFlight;
+        let ticket = JSON.stringify(bookedFlight);
         let flight = bookedFlight.flightId;
-        let name = "";
-        let passport = "";
+        let identity = this.identityProvider.getIdentity();
+        let name = identity.fullName;
+        let passport = identity.passport;
+        if (!passport)
+            passport = "passport-test";
         let vectors = "";
         let checkedIn = false;
 
         let flightpassContract = new this.web3.eth.Contract(abi);
         let contractAddress = "";
+        console.log('DEPLOYING WITH:');
+        console.log('name:', name);
+        console.log('this.walletProvider.getPublicKey():', this.walletProvider.getPublicKey());
+        console.log('ticket:', ticket);
+        console.log('flight:', flight);
+        console.log('passport:', passport);
         let deployment = await flightpassContract.deploy(
             {
                 data: '0x' + bytecode,

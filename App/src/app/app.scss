@@ -17,6 +17,44 @@
 
 $klm-blue: #00A1DE !important;
 
+h1 {
+    line-height: 1.35 !important;
+    font-size: 29px !important;
+    font-family: 'Noa LT W02 Light';
+}
+
+h2 {
+    line-height: 1.35 !important;
+    font-size: 25px !important;
+    font-family: 'Noa LT W02 Light';
+}  
+
+h3 {
+    line-height: 1.5 !important;
+    font-size: 23px !important;
+    font-family: 'Noa LT W02 Light';
+}
+
+h4 {
+    line-height: 1.5 !important;
+    font-size: 20px !important;
+    font-family: 'Noa LT W02 Light';
+}
+
+p {
+    line-height: 1.5 !important;
+    font-size: 16px !important;
+    font-family: 'Noa LT W02 Light';
+}
+
+button {
+    font-family: 'Noa LT W02 Light';
+}
+
+input {
+    font-family: 'Noa LT W02 Light';
+}
+
 :focus::-webkit-input-placeholder{
      text-indent: -999px
 }
@@ -52,7 +90,7 @@ ion-content {
 .klm-button {
     height: 50px;
     width: 80%;
-    font-size: 26px;
+    font-size: 20px;
     padding-top: 12px;
     padding-bottom: 12px;
     margin-bottom: 30px;
@@ -110,7 +148,7 @@ ion-content {
     margin-bottom: 26px;
     background-color: white;
     color: #003145;
-    font-size: 20px;
+    font-size: 16px;
     padding: 8px;
     border-radius: 4px;
     border: 2px solid #F0EFED;
@@ -136,6 +174,7 @@ ion-content {
 
 .swiper-slide {
     display: block;
+    padding: 16px;
 
     img {
         margin-top: 30px;
@@ -148,7 +187,7 @@ ion-content {
 }
 
 .swiper-pagination-bullet-active {
-    background-color: white;
+    background-color: $klm-blue;
 }
 
 .swiper-pagination-bullet {
@@ -215,4 +254,16 @@ ion-content {
     align-items: center;
     flex-direction: column;
     text-align: center;
+}
+
+@font-face{
+    font-family:"Longhand W01 RegularLP";
+    src:url("../assets/fonts/7825fff4-c5bf-4ddb-b866-760d432c0953.eot?#iefix");
+    src:url("../assets/fonts/7825fff4-c5bf-4ddb-b866-760d432c0953.eot?#iefix") format("eot"),url("../assets/fonts/af59083c-76bd-40f3-8887-f6a9f2bdb79e.woff2") format("woff2"),url("../assets/fonts/a8d8653b-cb98-492d-be8c-a15b016eb134.woff") format("woff"),url("../assets/fonts/c5ade2b8-6fb2-404f-875b-84dca1c68e8d.ttf") format("truetype"),url("../assets/fonts/79f0fec1-fb41-44b0-a17d-4677a426368e.svg#79f0fec1-fb41-44b0-a17d-4677a426368e") format("svg");
+}
+
+@font-face{
+    font-family:"Noa LT W02 Light";
+    src:url("../assets/fonts/28b252e1-028a-482b-8e08-6eed58236cf8.eot?#iefix");
+    src:url("../assets/fonts/28b252e1-028a-482b-8e08-6eed58236cf8.eot?#iefix") format("eot"),url("../assets/fonts/3df3b35f-9689-4556-ac6f-de646370eaa4.woff2") format("woff2"),url("../assets/fonts/c423b516-460f-4d10-acd1-e465ffb62bc3.woff") format("woff"),url("../assets/fonts/08d13695-efc1-48ce-a456-fc9ac36e9fbc.ttf") format("truetype"),url("../assets/fonts/99dd3df3-65fd-487d-ba0e-4ebf429d0f1e.svg#99dd3df3-65fd-487d-ba0e-4ebf429d0f1e") format("svg");
 }

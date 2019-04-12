@@ -16,7 +16,7 @@ export class BookSuccessPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad BookSuccessPage');
+
 	}
 
 	goToAccountDashboard(): void {
