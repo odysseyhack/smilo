@@ -21,6 +21,6 @@
 	</div>
 
 	<div class="klm-button-container">
-		<button class="klm-button" (click)="goToEPassportCreatedPage()">Finish e-passport</button>
+		<button class="klm-button" [disabled]="!passport" (click)="goToEPassportCreatedPage()">Finish e-passport</button>
 	</div>
 </ion-content>
