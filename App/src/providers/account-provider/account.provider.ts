@@ -22,10 +22,17 @@ export class AccountProvider {
         );
     }
 
+    /**
+     * Returns true if the user already created an account.
+     */
     public accountExists(): boolean {
         return !!this.storageProvider.read(ACCOUNT_KEY);
     }
 
+    /**
+     * Sets the name of this account. The changes will immediately be serialized.
+     * @param name 
+     */
     public setName(name: string) {
         this.account = {
             name: name
@@ -38,10 +45,19 @@ export class AccountProvider {
         return this.account.name;
     }
 
+    /**
+     * Returns an Observable which, when subscribed to, will notify the listener when the user has set the password.
+     * 
+     * Listeners could then respond to this by decrypting data.
+     */
     public onPasswordChanged(): Observable<void> {
         return this.passwordChanged.asObservable();
     }
 
+    /**
+     * Sets the password used to unlock the account.
+     * @param password
+     */
     public setPassword(password: string) {
         this.password = password;
 
@@ -54,6 +70,9 @@ export class AccountProvider {
 
     }
 
+    /**
+     * Encrypts the given data and stores it in local storage. The data can later be retrieved by the given key.
+     */
     public encryptToStorage(key: string, data: any) {
         if(!this.password) {
             throw new Error("Please unlock account first");
@@ -65,6 +84,9 @@ export class AccountProvider {
         );
     }
 
+    /**
+     * Decrypts and returns data previously stored encrypted in local storage.
+     */
     public decryptFromStorage<T>(key: string): T {
         if(!this.password) {
             throw new Error("Please unlock account first");
@@ -78,6 +100,10 @@ export class AccountProvider {
         }
     }
 
+    /**
+     * Returns true if the given password can be used to unlock this account.
+     * @param password
+     */
     public isCorrectPassword(password: string): boolean {
         return this.encryptionHelper.decryptKeyStore(
             this.storageProvider.readAsJSON<IKeyStore>(ACCOUNT_KEY),

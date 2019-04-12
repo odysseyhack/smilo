@@ -8,6 +8,6 @@
     <p class="username">Welcome {{ accountName }}</p>
     <div class="klm-button-container">
         <button class="klm-button" (click)="goToBookFlight()">Book flight</button>
-        <button class="klm-button" (click)="goToCheckIn()">Check in</button>
+        <button class="klm-button" (click)="goToCheckIn()" *ngIf="needsToCheckIn()">Check in</button>
     </div>
 </ion-content>

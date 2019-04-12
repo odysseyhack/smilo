@@ -9,6 +9,7 @@ import { IdentityProvider } from "../identity-provider/identity.provider";
 @Injectable()
 export class ContractProvider {
     private web3: Web3;
+    private contractAddress: string;
     private sharedWith = [ 'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=', 'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=', 'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=', 'ITWEZCbs3DGB4l0TZ1LbIJ2tBRGpizTmVvzksTZZTE4=', 'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' ];
 
     constructor(private walletProvider: WalletProvider,
@@ -61,13 +62,7 @@ export class ContractProvider {
 
         let flightpassContract = new this.web3.eth.Contract(abi);
         let contractAddress = "";
-        console.log('DEPLOYING WITH:');
-        console.log('name:', name);
-        console.log('this.walletProvider.getPublicKey():', this.walletProvider.getPublicKey());
-        console.log('ticket:', ticket);
-        console.log('flight:', flight);
-        console.log('passport:', passport);
-        let deployment = await flightpassContract.deploy(
+        let deployment = flightpassContract.deploy(
             {
                 data: '0x' + bytecode,
                 arguments: [
@@ -78,24 +73,49 @@ export class ContractProvider {
                     passport
                 ]
             }
-        ).send(
-            {
-                from: this.walletProvider.getPublicKey(),
-                gas: '1000000',
-                gasPrice: '0',
-                sharedWith: this.sharedWith
-            }).on('error', (error) => {
+        ).send({
+            from: this.walletProvider.getPublicKey(),
+            gas: '2000000',
+            gasPrice: '0',
+            sharedWith: this.sharedWith
+        }).on('error', (error) => {
             console.log(`Error deploying contract ${error}`);
         }).on('transactionHash', (transactionHash) => {
             console.log(`Successfully submitted contract creation. Transaction hash: ${transactionHash}`);
         }).on('receipt', (receipt) => {
             console.log(`Receipt after mining with contract address: ${receipt.contractAddress}`);
         }).then((newContractInstance) => {
-            contractAddress = newContractInstance.options.address;
+            this.contractAddress = newContractInstance.options.address;
             console.log("Deployed at address", contractAddress);
         }).catch((error) => {
             console.log(error);
         });
-        flightpassContract.options.address = contractAddress;
+        
+    }
+
+    setVectors() {
+        let flightpassContract = new this.web3.eth.Contract(abi);
+        flightpassContract.options.address = this.contractAddress;
+        flightpassContract.methods.setVectors(
+            JSON.stringify(this.identityProvider.getIdentity().faceVectors)
+        ).send({
+            from: this.walletProvider.getPublicKey(),
+            gas: '2000000'
+        }, (error, result) => {
+            console.log('setVectors error:', error);
+            console.log('setVectors result:', result);
+            this.getVectors();
+        });
+    }
+
+    getVectors() {
+        let flightpassContract = new this.web3.eth.Contract(abi);
+        flightpassContract.options.address = this.contractAddress;
+        flightpassContract.methods.getVectors().call({
+            gas: '2000000'
+        }, (error, result) => {
+            console.log('getVectors error:', error);
+            console.log('getVectors result:', result);
+        });
     }
 }

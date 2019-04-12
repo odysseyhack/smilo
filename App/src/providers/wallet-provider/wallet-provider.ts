@@ -8,12 +8,6 @@ export const KEY_STORE_STORAGE_KEY = "wallet";
 export interface IWalletProvider {
     createNew(): void;
 
-    restoreWallet(): void;
-
-    reset(): void;
-
-    save(): void;
-
     getPublicKey(): string;
 
     getPrivateKey(): string;
@@ -33,22 +27,20 @@ export class WalletProvider implements IWalletProvider {
         );
     }
 
+    /**
+     * Creates a new wallet.
+     */
     createNew(): void {
         this.generateNew();
         this.save();
     }
 
-    restoreWallet(): void {
+    private restoreWallet(): void {
         this.privateKey = this.accountProvider.decryptFromStorage(KEY_STORE_STORAGE_KEY);
         if(this.privateKey) {
             let account = this.web3Eth.privateKeyToAccount(this.privateKey);
             this.publicKey = account.address;
         }
-    }
-
-    reset(): void {
-        this.publicKey = "";
-        this.privateKey = "";
     }
 
     private generateNew() {
@@ -57,7 +49,7 @@ export class WalletProvider implements IWalletProvider {
         this.privateKey = account.privateKey;
     }
 
-    save(): void {
+    private save(): void {
         this.accountProvider.encryptToStorage(KEY_STORE_STORAGE_KEY, this.privateKey);
     }
 

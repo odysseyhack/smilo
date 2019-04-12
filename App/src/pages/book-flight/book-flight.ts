@@ -87,8 +87,8 @@ export class BookFlightPage {
 		}
 		this.contractProvider.deployContract(bookedFlight);
 	
-		// this.bookedFlightsProvider.addToBookedFlights(bookedFlight);
-		// this.navCtrl.push(BookSuccessPage, {bookedFlight: bookedFlight});
+		this.bookedFlightsProvider.addToBookedFlights(bookedFlight);
+		this.navCtrl.push(BookSuccessPage, {bookedFlight: bookedFlight});
 	}
 
 	getRandomCity(): string {
