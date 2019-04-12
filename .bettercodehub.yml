@@ -4,3 +4,4 @@ languages:
 exclude:
 - /Deploymentscripts/
 - /Smartcontracts/
+- /App/src/smartcontracts/smartcontracts.ts
