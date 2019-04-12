@@ -19,7 +19,7 @@ export class CheckInPage implements OnDestroy, OnInit {
 
 	private stream: MediaStream;
 
-	private timeoutId: number = -1;
+	private timeoutId: any;
 
 	public faceScan: IFaceScanResult;
 
