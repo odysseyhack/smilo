@@ -65,6 +65,7 @@ export class AccountProvider {
     }
 
     private restore() {
+        console.log('account restore()');
         this.account = this.decryptFromStorage(ACCOUNT_KEY);
 
     }

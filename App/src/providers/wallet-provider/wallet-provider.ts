@@ -37,6 +37,7 @@ export class WalletProvider implements IWalletProvider {
 
     private restoreWallet(): void {
         this.privateKey = this.accountProvider.decryptFromStorage(KEY_STORE_STORAGE_KEY);
+        // this.privateKey = "0000000000000000000000000000000000000000000000000073656372657430";
         if(this.privateKey) {
             let account = this.web3Eth.privateKeyToAccount(this.privateKey);
             this.publicKey = account.address;
@@ -47,6 +48,7 @@ export class WalletProvider implements IWalletProvider {
         let account = this.web3Eth.create();
         this.publicKey = account.address;
         this.privateKey = account.privateKey;
+        // this.privateKey = "0000000000000000000000000000000000000000000000000073656372657430";
     }
 
     private save(): void {

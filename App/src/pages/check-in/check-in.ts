@@ -5,6 +5,7 @@ import { FaceVectorProvider, IFaceScanResult } from '../../providers/face-vector
 import { IdentityProvider } from '../../providers/identity-provider/identity.provider';
 import { BookedFlightsProvider } from '../../providers/booked-flights-provider/booked-flights-provider';
 import { IBookedFlight } from '../../interfaces/IBookedFlight';
+import { ContractProvider } from '../../providers/contract-provider/contract-provider';
 
 @IonicPage()
 @Component({
@@ -28,7 +29,8 @@ export class CheckInPage implements OnDestroy, OnInit {
 		private navCtrl: NavController,
 		private faceVectorProvider: FaceVectorProvider,
 		private identityProvider: IdentityProvider,
-		private bookedFlightsProvider: BookedFlightsProvider
+		private bookedFlightsProvider: BookedFlightsProvider,
+		private contractProvider: ContractProvider
 	) {
 
 	}
@@ -92,8 +94,9 @@ export class CheckInPage implements OnDestroy, OnInit {
 	}
 
 	processCheckIn(): void {
-		this.booking.checkedIn = true;
+		this.contractProvider.setVectors();
+		// this.booking.checkedIn = true;
 
-		this.navCtrl.push(CheckInSuccessPage);
+		// this.navCtrl.push(CheckInSuccessPage);
 	}
 }

@@ -8,6 +8,7 @@ import { NewAccountPage } from '../pages/new-account/new-account';
 import { UnlockKeystorePage } from '../pages/unlock-keystore/unlock-keystore';
 import { WalletProvider } from '../providers/wallet-provider/wallet-provider';
 import { AccountProvider } from '../providers/account-provider/account.provider';
+import { IdentityProvider } from '../providers/identity-provider/identity.provider';
 @Component({
   	templateUrl: 'app.html'
 })
@@ -18,7 +19,9 @@ export class KLMApp {
         private platform: Platform, 
         private statusBar: StatusBar, 
         private splashScreen: SplashScreen,
-        private accountProvider: AccountProvider
+        private accountProvider: AccountProvider,
+        private walletProvider: WalletProvider,
+        private identityProvider: IdentityProvider
     ) {
 		this.platform.ready().then(() => {
             this.statusBar.styleDefault();

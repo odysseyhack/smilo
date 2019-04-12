@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { NewAccountSlidesPage } from '../new-account-slides/new-account-slides';
 import { WalletProvider } from '../../providers/wallet-provider/wallet-provider';
 import { AccountProvider } from '../../providers/account-provider/account.provider';
+import { FaucetProvider } from '../../providers/faucet-provider/faucet-provider';
 
 @IonicPage()
 @Component({
@@ -18,21 +19,25 @@ export class NewAccountPage {
 	constructor(
 		private navCtrl: NavController, 
 		private walletProvider: WalletProvider,
-		private accountProvider: AccountProvider
+		private accountProvider: AccountProvider,
+		private faucetProvider: FaucetProvider
 	) {
 		
 	}
 
-	createKeyStore() {
+	async createKeyStore() {
 		this.accountProvider.setPassword(this.password);
 		this.accountProvider.setName(this.userName);
 		try {
 			this.walletProvider.createNew();
+			console.log('Requesting funds:', this.walletProvider.getPublicKey());
+			let requestResult = await this.faucetProvider.requestFunds(this.walletProvider.getPublicKey());
+			console.log('requestFundsResult:', requestResult);
+			console.log('priv:', this.walletProvider.getPrivateKey());
+			this.navCtrl.push(NewAccountSlidesPage);
 		} catch (error) {
 			console.error(error);
 		}
-
-		this.navCtrl.push(NewAccountSlidesPage);
 	}
 
 	onPasswordChanged(): void {

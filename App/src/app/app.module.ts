@@ -48,6 +48,9 @@ import { TravelPageModule } from '../pages/travel/travel.module';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { AccountProvider } from '../providers/account-provider/account.provider';
 import { IdentityProvider } from '../providers/identity-provider/identity.provider';
+import { ContractProvider } from '../providers/contract-provider/contract-provider';
+import { FaucetProvider } from '../providers/faucet-provider/faucet-provider';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FaceVectorProvider } from '../providers/face-vector/face-vector.provider';
 
 @NgModule({
@@ -74,7 +77,8 @@ import { FaceVectorProvider } from '../providers/face-vector/face-vector.provide
 		CheckInPageModule,
 		CheckInSuccessPageModule,
 		TravelPageModule,
-		NgxQRCodeModule
+		NgxQRCodeModule,
+		HttpClientModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -103,8 +107,10 @@ import { FaceVectorProvider } from '../providers/face-vector/face-vector.provide
 		StorageProvider,
 		WalletProvider,
 		BookedFlightsProvider,
+		ContractProvider,
 		AccountProvider,
 		IdentityProvider,
+		FaucetProvider,
 		FaceVectorProvider
 	]
 })
