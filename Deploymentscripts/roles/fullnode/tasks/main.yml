@@ -1,0 +1,111 @@
+---
+# file: roles/fullnodes/tasks/main.yml
+
+- name: Alter the login message when a user logs in into the machine
+  lineinfile:
+    dest: "/etc/issue.net"
+    line: "THIS HOST CONTAINS A FULLNODE!"
+    state: present
+
+- name: Create Smilo directories ...
+  file:
+    path: "{{ smilo_base_dir }}/{{ item }}"
+    state: directory
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+  with_items:
+    - bin
+    - data
+    - data/geth
+    - data/keystore
+
+- name: Create Smilo log files ...
+  file:
+    path: "/var/log/{{ item }}"
+    state: touch
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0600
+  with_items:
+    - go-smilo.log
+
+- name: Install permissioned nodes
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ smilo_base_dir }}/data/{{ item }}.json"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0600
+  with_items:
+    - permissioned-nodes
+    - trusted-nodes
+    - static-nodes
+
+- name: download Go-Smilo
+  get_url:
+    url: "{{go_smilo_url}}"
+    dest: "{{ smilo_base_dir }}/bin/go-smilo"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+    force: yes
+
+- name: install Smilo init.d file
+  template:
+    src: go-smilo.j2
+    dest: /etc/init.d/go-smilo
+    owner: root
+    group: root
+    mode: 0755
+  register: init
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: init.changed
+
+- name: install Smilo init.d file
+  command: chkconfig --add go-smilo
+  when: init.changed
+
+- name: Boot Smilo on startup
+  command: chkconfig go-smilo on
+  when: init.changed
+
+- name: Make sure the file permissions are correct.
+  file:
+    path: "{{ smilo_base_dir }}"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    recurse: yes
+
+- name: Install key file
+  copy:
+    src: "{{ vault_dir }}/keystore{{ key }}.enc"
+    dest: "{{ smilo_base_dir }}/data/keystore/key"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0600
+    decrypt: yes
+
+# - name: Install nodekey file
+#   copy:
+#     src: "{{ vault_dir }}/nodekey{{ key }}.enc"
+#     dest: "{{ smilo_base_dir }}/data/geth/nodekey"
+#     owner: "{{ smilo_user }}"
+#     group: "{{ smilo_group }}"
+#     mode: 0600
+#     decrypt: yes
+
+- name: Install password file
+  copy:
+    src: "{{ vault_dir }}/account-password.txt.enc"
+    dest: "{{ smilo_base_dir }}/data/account.txt"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0600
+    decrypt: yes
+
+#
+# Continu to the update role
+#

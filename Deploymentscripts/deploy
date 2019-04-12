@@ -1,0 +1,19 @@
+#!/bin/sh
+
+case "$1" in
+        core)
+            echo "Deploy Core"
+            ansible-playbook -i inventories/test.yml books/core.yml -e env=test
+            ;;
+        node)
+            echo "Deploy Node"
+            ansible-playbook -i inventories/test.yml books/node.yml -e env=test
+            ;;
+        apps)
+            echo "Deploy Apps"
+            ansible-playbook -i inventories/test.yml books/apps.yml -e env=test
+            ;;
+        *)
+            echo $"Usage: $0 {core|node|apps}"
+            exit 1
+esac

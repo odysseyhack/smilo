@@ -1,0 +1,53 @@
+{
+    "useWhiteList": false,
+    "server": {
+        "port": 9001,
+        "hostName": "http://0.0.0.0",
+        "sslConfig": {
+            "tls": "OFF",
+            "generateKeyStoreIfNotExisted": true,
+            "serverKeyStore": "{{ smilo_base_dir }}/keys/server-keystore",
+            "serverKeyStorePassword": "smilo",
+            "serverTrustStore": "{{ smilo_base_dir }}/keys/server-truststore",
+            "serverTrustStorePassword": "smilo",
+            "serverTrustMode": "TOFU",
+            "knownClientsFile": "{{ smilo_base_dir }}/keys/knownClients",
+            "clientKeyStore": "{{ smilo_base_dir }}/keys/client-keystore",
+            "clientKeyStorePassword": "smilo",
+            "clientTrustStore": "{{ smilo_base_dir }}/keys/client-truststore",
+            "clientTrustStorePassword": "smilo",
+            "clientTrustMode": "TOFU",
+            "knownServersFile": "{{ smilo_base_dir }}/keys/knownServers"
+        }
+    },
+    "peer": [
+        {
+            "url": "http://{{ blackbox1 }}:9001"
+        },
+        {
+            "url": "http://{{ blackbox2 }}:9001"
+        },
+        {
+            "url": "http://{{ blackbox3 }}:9001"
+        },
+        {
+            "url": "http://{{ blackbox4 }}:9001"
+        },
+        {
+            "url": "http://{{ blackbox5 }}:9001"
+        }
+    ],
+    "keys": {
+        "passwords": [],
+        "keyData": [
+            {
+                "config": "{{ smilo_base_dir }}/keys/blackbox.key",
+                "publicKey": "{{ smilo_base_dir }}/keys/blackbox.pub"
+            }
+        ]
+    },
+    "alwaysSendTo": [],
+    "socket": "{{ smilo_base_dir }}/data/blackbox.ipc",
+    "dbfile": "{{ smilo_base_dir }}/data/blackbox.db",
+    "peersdbfile": "{{ smilo_base_dir }}/data/blackbox-peers.db"
+}

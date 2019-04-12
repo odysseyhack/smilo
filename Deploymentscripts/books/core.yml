@@ -1,0 +1,10 @@
+---
+# core.yml
+- hosts: test
+  pre_tasks:
+    - include_vars: "../vars/{{ env }}.yml"
+      tags:
+        - always
+  roles:
+    - common
+    - cis
