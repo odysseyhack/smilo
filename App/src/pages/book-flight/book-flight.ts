@@ -46,11 +46,10 @@ export class BookFlightPage {
 		let randomNumber = Math.floor(Math.random() * 10) + 1;
 		let adultText = randomNumber == 1 ? " Adult" : " Adults";
 		this.travellers = randomNumber + adultText;
-		console.log(this.date);
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad BookFlightPage');
+
 	}
 
 	processBookFlight(): void {

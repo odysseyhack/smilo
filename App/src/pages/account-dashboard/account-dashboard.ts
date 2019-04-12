@@ -16,7 +16,7 @@ export class AccountDashboardPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad AccountDashboardPage');
+		
 	}
 
 	goToBookFlight(): void {

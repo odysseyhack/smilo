@@ -1,7 +1,7 @@
 <div class="menu">
     <div class="logo-container">
         <img src="/assets/imgs/klm-logo.png" class="klm-sidebar-img">
-        <p class="logo-text">Blue Travel</p>
+        <img src="/assets/imgs/skyteam.png" class="skyteam">
         <img src="/assets/imgs/cross.png" class="cross-sidebar-img" (click)="shown = false">
     </div>
 
@@ -11,7 +11,7 @@
                 <img src="/assets/imgs/account.png">
             </div>
             <div class="text">
-                Account
+                <p>Account</p>
             </div>
         </div>
         <div class="option sub">
@@ -19,7 +19,7 @@
                 <img src="/assets/imgs/account.png">
             </div>
             <div class="text">
-                e-Identity
+                <p>e-Identity</p>
             </div>
         </div>
         <div class="option sub">
@@ -27,7 +27,7 @@
                 <img src="/assets/imgs/document.png">
             </div>
             <div class="text">
-                e-Passport
+                <p>e-Passport</p>
             </div>
         </div>
         <div class="option">
@@ -35,7 +35,7 @@
                 <img src="/assets/imgs/global.png" class="global-icon">
             </div>
             <div class="text">
-                Travels
+                <p>Travels</p>
             </div>
         </div>
         <div class="option sub" *ngFor="let flight of bookedFlights" (click)="goToTravelPage(flight)">
@@ -43,7 +43,7 @@
                 <img src="/assets/imgs/airplane-up.png" class="airplane-icon">
             </div>
             <div class="text">
-                {{ flight.date | date: 'dd/MM/yyyy' }} - {{ flight.from }} -> {{ flight.to }}
+                <p>{{ flight.date | date: 'dd/MM/yyyy' }} - {{ flight.from }} -> {{ flight.to }}</p>
             </div>
         </div>
         <div class="option">
@@ -51,7 +51,7 @@
                 <img src="/assets/imgs/timeline.png">
             </div>
             <div class="text">
-                Timeline
+                <p>Timeline</p>
             </div>
         </div>
         <div class="option">
@@ -59,7 +59,7 @@
                 <img src="/assets/imgs/settings.png" class="settings-icon">
             </div>
             <div class="text">
-                Settings
+                <p>Settings</p>
             </div>
         </div>
     </div>
