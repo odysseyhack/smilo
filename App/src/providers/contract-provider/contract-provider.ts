@@ -5,6 +5,7 @@ import { WalletProvider } from "../wallet-provider/wallet-provider";
 import { abi, bytecode } from "../../smartcontracts/smartcontracts";
 import { IBookedFlight } from "../../interfaces/IBookedFlight";
 import { IdentityProvider } from "../identity-provider/identity.provider";
+import { ITrusted } from "../../interfaces/ITrusted";
 
 @Injectable()
 export class ContractProvider {
@@ -92,13 +93,13 @@ export class ContractProvider {
         
     }
 
-    setVectors() {
+    async setVectors() {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
         let vectors = "[" + this.identityProvider.getIdentity().faceVectors + "]";
         console.log('vectors:', vectors);
         console.log('priv:', this.walletProvider.getPrivateKey());
-        flightpassContract.methods.setVectors(
+        await flightpassContract.methods.setVectors(
             vectors
         ).send({
             from: this.walletProvider.getPublicKey(),
@@ -130,6 +131,26 @@ export class ContractProvider {
             from: this.walletProvider.getPublicKey()
         }).then((name) => {
             console.log('Name:', name);
+        });
+    }
+
+    getSmartContract(): string {
+        return this.contractAddress;
+    }
+
+    async addTrusted(trustedList: ITrusted[]) {
+        let flightpassContract = new this.web3.eth.Contract(abi);
+        flightpassContract.options.address = this.contractAddress;
+        await flightpassContract.methods.addTrusted(
+            trustedList
+        ).send({
+            from: this.walletProvider.getPublicKey(),
+            gas: '2000000',
+            gasPrice: '0',
+            sharedWith: this.sharedWith
+        }, (error, result) => {
+            console.log('addTrusted error:', error);
+            console.log('addTrusted result:', result);
         });
     }
 }

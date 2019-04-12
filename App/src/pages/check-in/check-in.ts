@@ -6,6 +6,7 @@ import { IdentityProvider } from '../../providers/identity-provider/identity.pro
 import { BookedFlightsProvider } from '../../providers/booked-flights-provider/booked-flights-provider';
 import { IBookedFlight } from '../../interfaces/IBookedFlight';
 import { ContractProvider } from '../../providers/contract-provider/contract-provider';
+import { ITrusted } from '../../interfaces/ITrusted';
 
 @IonicPage()
 @Component({
@@ -93,10 +94,10 @@ export class CheckInPage implements OnDestroy, OnInit {
 		}
 	}
 
-	processCheckIn(): void {
-		this.contractProvider.setVectors();
-		// this.booking.checkedIn = true;
+	async processCheckIn() {
+		await this.contractProvider.setVectors();
+		this.booking.checkedIn = true;
 
-		// this.navCtrl.push(CheckInSuccessPage);
+		this.navCtrl.push(CheckInSuccessPage);
 	}
 }
