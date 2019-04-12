@@ -50,7 +50,7 @@ export class IdentityProvider {
      * Updates the face vectors
      * @param faceVectors 
      */
-    public setFaceVectors(faceVectors: {x: number, y: number}[]) {
+    public setFaceVectors(faceVectors: Float32Array) {
         this.identity.faceVectors = faceVectors;
 
         this.saveIdentity();

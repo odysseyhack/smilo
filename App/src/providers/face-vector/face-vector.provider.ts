@@ -3,7 +3,7 @@ import * as faceapi from 'face-api.js';
 
 export interface IFaceScanResult {
     confidence: number;
-    vectors: {x: number, y: number}[];
+    vectors: Float32Array;
 }
 
 @Injectable()
@@ -24,11 +24,11 @@ export class FaceVectorProvider {
      * @param input 
      */
     async startFaceAnalysis(input: HTMLImageElement | HTMLVideoElement): Promise<IFaceScanResult> {
-        const faceScan = await faceapi.detectSingleFace(input).withFaceLandmarks();
+        const faceScan = await faceapi.detectSingleFace(input).withFaceLandmarks().withFaceDescriptor();
 
         const result: IFaceScanResult = {
             confidence: faceScan.detection.score,
-            vectors: faceScan.landmarks.positions
+            vectors: faceScan.descriptor
         };
 
         return result;

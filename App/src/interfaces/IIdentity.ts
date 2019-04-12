@@ -3,5 +3,5 @@ export class IIdentity {
     birthDate: Date;
     nationality: string;
     passport: string;
-    faceVectors: {x: number, y: number}[];
+    faceVectors: Float32Array;
 }
