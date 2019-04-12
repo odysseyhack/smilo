@@ -4,6 +4,7 @@ import { BookFlightPage } from '../book-flight/book-flight';
 import { CheckInPage } from '../check-in/check-in';
 import { AccountProvider } from '../../providers/account-provider/account.provider';
 import { BookedFlightsProvider } from '../../providers/booked-flights-provider/booked-flights-provider';
+import { IBookedFlight } from '../../interfaces/IBookedFlight';
 
 @IonicPage()
 @Component({
@@ -13,12 +14,16 @@ import { BookedFlightsProvider } from '../../providers/booked-flights-provider/b
 export class AccountDashboardPage {
 	menuBarShown: boolean;
 	accountName: string;
+	bookedFlight: IBookedFlight;
 
 	constructor(
 		private navCtrl: NavController, 
 		private accountProvider: AccountProvider,
 		private bookedFlightsProvider: BookedFlightsProvider
 	) {
+		this.bookedFlightsProvider.onBookedFlightChanged().subscribe(
+			(bookedFlight) => this.bookedFlight = bookedFlight
+		);
 	}
 
 	ionViewDidLoad() {
@@ -34,8 +39,6 @@ export class AccountDashboardPage {
 	}
 
 	needsToCheckIn(): boolean {
-		let booking = this.bookedFlightsProvider.getBookedFlights()[0];
-
-		return booking && !booking.checkedIn;
+		return this.bookedFlight && !this.bookedFlight.checkedIn;
 	}
 }

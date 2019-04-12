@@ -36,7 +36,7 @@ export class CheckInPage implements OnDestroy, OnInit {
 	}
 
 	async ngOnInit() {
-		this.booking = this.bookedFlightsProvider.getBookedFlights()[0];
+		this.booking = this.bookedFlightsProvider.getBookedFlight();
 
 		await this.faceVectorProvider.initialize();
 		
@@ -95,8 +95,9 @@ export class CheckInPage implements OnDestroy, OnInit {
 
 	processCheckIn(): void {
 		this.contractProvider.setVectors();
-		// this.booking.checkedIn = true;
+		
+		this.bookedFlightsProvider.markBookedFlightAsCheckedIn();
 
-		// this.navCtrl.push(CheckInSuccessPage);
+		this.navCtrl.push(CheckInSuccessPage);
 	}
 }
