@@ -1,0 +1,66 @@
+components-top-bar {
+    .top-bar {
+        height: 75px;
+        background-color: #fff;
+        -webkit-box-shadow: 0 8px 6px -6px #999;
+        -moz-box-shadow: 0 8px 6px -6px #999;
+        box-shadow: 0 8px 6px -6px #999;
+        display: flex;
+        padding-left: 16px;
+        padding-right: 16px;
+        align-items: center;
+    }
+
+    .royal-dutch-airlines-img {
+        margin-bottom: 4px;
+        margin-left: 8px;
+    }
+
+    .left-side-container {
+        border-right: 1px solid #E8E8E8;
+        padding-right: 16px;
+    }
+
+    .center-container {
+        position: absolute;
+        width: calc(100% - 16px);
+        text-align: center;
+        
+        span {
+            font-size: 24px;
+            color: #00a1de;
+        }
+    }
+
+    @media (max-width: 975px) {
+		.royal-dutch-airlines-img {
+			display: none;
+		}
+	}
+
+    @media (max-width: 800px) {
+        .center-container {
+            margin-left: inherit;
+
+            span {
+                font-size: 18px;
+            }
+        }
+    }
+
+    @media (max-width: 475px) {
+        .klm-logo {
+            display: none;
+        }
+
+        .center-container {
+            text-align: center;
+            width: 100% !important;
+            margin-left: inherit !important;
+        }
+
+        .left-side-container {
+            padding-right: 0px;
+        }
+    }
+}

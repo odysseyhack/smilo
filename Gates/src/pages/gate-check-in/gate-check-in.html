@@ -1,0 +1,26 @@
+<ion-content>
+	<components-top-bar publicKey="{{ publicKey }}"></components-top-bar>
+	<div class="main-middle-container">
+		<div (click)="manualPhoto()" class="camera-title" [ngClass]="{'red': camStep === 1, 'orange': camStep === 2, 'green': camStep === 3}">
+			<p>{{ whatToDo }}</p>
+		</div> 
+
+		<div class="camera-container">
+			<div id="container">
+				<div class="camera-flash-container" [ngClass]="{'flash-camera': doFlashCamera === true}"></div>
+				<video [hidden]="!publicKey" id="videoel" width="300" height="400" #videoplayer></video>
+				<qr-scanner
+					[hidden]="publicKey"
+					class="qr-scanner-video"
+					[debug]="false"
+					[stopAfterScan]="false"
+					[updateTime]="500"> 
+				</qr-scanner>
+			</div>
+		</div>
+	</div>
+	<components-bottom-bar></components-bottom-bar>
+</ion-content>
+	
+	
+	

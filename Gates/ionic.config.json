@@ -1,0 +1,7 @@
+{
+  "name": "KLM-Demo",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

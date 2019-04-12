@@ -1,0 +1,37 @@
+components-bottom-bar {
+
+    .bottom-bar {
+        height: 75px;
+        background-color: #fff;
+        -webkit-box-shadow: 0px -8px 6px -6px #999;
+        -moz-box-shadow: 0px -8px 6px -6px #999;
+        box-shadow: 0px -8px 6px -6px #999;
+        display: flex;
+        padding-left: 16px;
+        padding-right: 16px;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .smilo-logo {
+        height: 50px;
+    }
+
+    .page-logo {
+        margin-left: 16px;
+    }
+
+    @media (max-width: 800px) {
+        .powered-by {
+            display: none;
+        }
+
+        .page-logo {
+            margin-left: inherit;
+        }
+    }
+}
