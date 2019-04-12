@@ -1,10 +1,25 @@
 <ion-content padding>
-	<div class="klm-header-container">
-		<h1 class="klm-header">Create E-Passport</h1>
-	</div>
+	<h1 class="klm-header">Create E-Passport</h1>
 	<p class="scan-top-hint">Scan passport.</p>
-	<img src="assets/imgs/nfc.png" class="center-img">
-	<p class="scan-bottom-hint">Scan passport successful.</p>
+
+	<!-- <img src="assets/imgs/nfc.png" class="center-img">
+	<p class="scan-bottom-hint">Scan passport successful.</p> -->
+	<div class="camera-container" *ngIf="!passport">
+		<div id="container">
+			<div class="camera-flash-container" [ngClass]="{'flash-camera': doFlashCamera === true}"></div>
+			<qr-scanner
+				class="qr-scanner-video"
+				[debug]="true"
+				[stopAfterScan]="false"
+				[updateTime]="500"> 
+			</qr-scanner>
+		</div>
+	</div>
+
+	<div class="passport-info" *ngIf="passport">
+		This passport belongs to <b>{{ passport }}</b>.
+	</div>
+
 	<div class="klm-button-container">
 		<button class="klm-button" (click)="goToEPassportCreatedPage()">Finish e-passport</button>
 	</div>
