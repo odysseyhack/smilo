@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AccountDashboardPage } from '../account-dashboard/account-dashboard';
 import { WalletProvider } from '../../providers/wallet-provider/wallet-provider';
+import { AccountProvider } from '../../providers/account-provider/account.provider';
+import { IdentityProvider } from '../../providers/identity-provider/identity.provider';
 
 @IonicPage()
 @Component({
@@ -13,9 +15,12 @@ export class UnlockKeystorePage {
     passwordError: string;
     wrongPasswordText: string
 
-	constructor(public navCtrl: NavController, 
-				public navParams: NavParams,
-				private walletProvider: WalletProvider) {
+	constructor(
+		private navCtrl: NavController, 
+		private walletProvider: WalletProvider,
+		private accountProvider: AccountProvider,
+		private identityProvider: IdentityProvider
+	) {
 
 	}
 
@@ -28,12 +33,16 @@ export class UnlockKeystorePage {
 	}
 
 	unlockKeystore(): void {
-        try {
-            this.walletProvider.unlockKeystore(this.password);
+		if(this.accountProvider.isCorrectPassword(this.password)) {
+			this.accountProvider.setPassword(this.password);
+
+			this.walletProvider.unlock();
+			this.identityProvider.restoreIdentity();
+			
             this.passwordError = "";
 			this.navCtrl.push(AccountDashboardPage);
-        } catch(error) {
-            this.passwordError = "Incorrect password";
-        }       
+		} else {
+			this.passwordError = "Incorrect password";
+		}    
     }
 }

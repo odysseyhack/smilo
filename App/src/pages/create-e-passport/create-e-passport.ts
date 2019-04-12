@@ -4,6 +4,7 @@ import { EPassportCreatedPage } from '../e-passport-created/e-passport-created';
 import { QrScannerComponent } from 'angular2-qrscanner';
 import { takeUntil, map, first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { IdentityProvider } from '../../providers/identity-provider/identity.provider';
 
 @IonicPage()
 @Component({
@@ -24,7 +25,8 @@ export class CreateEPassportPage {
 
 	constructor(
 		private navCtrl: NavController,
-		private platform: Platform
+		private platform: Platform,
+		private identityProvider: IdentityProvider
 	) {}
 
 	ionViewDidLoad() {
@@ -33,6 +35,8 @@ export class CreateEPassportPage {
 			first()
 		).subscribe(result => {
 			this.passport = result;
+
+			this.identityProvider.setPassport(this.passport);
 		});
 	}
 

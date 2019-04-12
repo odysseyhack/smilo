@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { NewAccountSlidesPage } from '../new-account-slides/new-account-slides';
 import { WalletProvider } from '../../providers/wallet-provider/wallet-provider';
+import { AccountProvider } from '../../providers/account-provider/account.provider';
 
 @IonicPage()
 @Component({
@@ -13,24 +14,23 @@ export class NewAccountPage {
 	passwordReEnter: string;
 	passwordInfo: string;
 
-	constructor(private navCtrl: NavController, 
-				private navParams: NavParams,
-				private walletProvider: WalletProvider) {
+	constructor(
+		private navCtrl: NavController, 
+		private walletProvider: WalletProvider,
+		private accountProvider: AccountProvider
+	) {
 		
 	}
 
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad NewAccountPage');
-	}
-
 	createKeyStore() {
-		console.log('Keystore pw:', this.password);
+		this.accountProvider.setPassword(this.password);
 		try {
-			this.walletProvider.createNewKeystore(this.password);
-			this.navCtrl.push(NewAccountSlidesPage);
+			this.walletProvider.createNew();
 		} catch (error) {
 			console.error(error);
 		}
+
+		this.navCtrl.push(NewAccountSlidesPage);
 	}
 
 	onPasswordChanged(): void {

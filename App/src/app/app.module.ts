@@ -46,6 +46,8 @@ import { faSpinner, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { TravelPage } from '../pages/travel/travel';
 import { TravelPageModule } from '../pages/travel/travel.module';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { AccountProvider } from '../providers/account-provider/account.provider';
+import { IdentityProvider } from '../providers/identity-provider/identity.provider';
 
 @NgModule({
 	declarations: [
@@ -99,7 +101,9 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 		{provide: ErrorHandler, useClass: IonicErrorHandler},
 		StorageProvider,
 		WalletProvider,
-		BookedFlightsProvider
+		BookedFlightsProvider,
+		AccountProvider,
+		IdentityProvider
 	]
 })
 export class AppModule {
