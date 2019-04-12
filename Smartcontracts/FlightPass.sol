@@ -112,8 +112,14 @@ contract FlightPass {
         }
     }
     
+    function isTrustedAddress(address trustedAddress) public onlyOwner view returns (bool) {
+        if(_trusted[trustedAddress].isValue) return true;
+        return false;
+    }
+    
     /**
      * Set address trustee to false
+     * Todo: clean up untrusted addresses
      * @return true if success
      */
     function delTrusted(address trustedAddress) public onlyOwner returns (bool) {
