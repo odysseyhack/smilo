@@ -1,26 +1,56 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import { EncryptionHelper } from "../../keystore/EncryptionHelper";
 import { StorageProvider } from "../storage-provider/storage-provider";
 import { IKeyStore } from "@smilo-platform/smilo-commons-js-web";
+import { IAccount } from "../../interfaces/IAccount";
+import { Observable } from "rxjs";
 
-const PASSWORD_CHECK_KEY = "password-check";
-const MAGIC_KEY = "check-complete";
+const ACCOUNT_KEY = "account";
 
 @Injectable()
 export class AccountProvider {
     private password: string;
     private encryptionHelper = new EncryptionHelper();
 
-    constructor(private storageProvider: StorageProvider) {}
+    private account: IAccount;
+
+    private passwordChanged: EventEmitter<void> = new EventEmitter();
+
+    constructor(private storageProvider: StorageProvider) {
+        this.onPasswordChanged().subscribe(
+            () => this.restore()
+        );
+    }
 
     public accountExists(): boolean {
-        return !!this.storageProvider.read(PASSWORD_CHECK_KEY);
+        return !!this.storageProvider.read(ACCOUNT_KEY);
+    }
+
+    public setName(name: string) {
+        this.account = {
+            name: name
+        };
+
+        this.encryptToStorage(ACCOUNT_KEY, this.account);
+    }
+
+    public getName(): string {
+        return this.account.name;
+    }
+
+    public onPasswordChanged(): Observable<void> {
+        return this.passwordChanged.asObservable();
     }
 
     public setPassword(password: string) {
         this.password = password;
 
-        this.updatePasswordCheck();
+        this.passwordChanged.emit();
+    }
+
+    private restore() {
+        this.account = this.decryptFromStorage(ACCOUNT_KEY);
+
     }
 
     public encryptToStorage(key: string, data: any) {
@@ -49,16 +79,8 @@ export class AccountProvider {
 
     public isCorrectPassword(password: string): boolean {
         return this.encryptionHelper.decryptKeyStore(
-            this.storageProvider.readAsJSON<IKeyStore>(PASSWORD_CHECK_KEY),
+            this.storageProvider.readAsJSON<IKeyStore>(ACCOUNT_KEY),
             password
-        ) == MAGIC_KEY
+        ) != null;
     }
-
-    private updatePasswordCheck() {
-        this.storageProvider.writeAsJSON(
-            PASSWORD_CHECK_KEY,
-            this.encryptionHelper.createKeyStore(MAGIC_KEY, this.password)
-        );
-    }
-
 }

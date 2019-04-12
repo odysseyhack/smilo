@@ -15,7 +15,11 @@ export class IdentityProvider {
 
     constructor(
         private accountProvider: AccountProvider
-    ) {}
+    ) {
+        this.accountProvider.onPasswordChanged().subscribe(
+            () => this.restoreIdentity()
+        );
+    }
 
     public setIdentity(fullName: string, birthDate: Date, nationality: string) {
         this.identity.fullName = fullName;

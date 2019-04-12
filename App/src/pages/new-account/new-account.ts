@@ -10,6 +10,7 @@ import { AccountProvider } from '../../providers/account-provider/account.provid
 	templateUrl: 'new-account.html',
 })
 export class NewAccountPage {
+	userName: string;
 	password: string;
 	passwordReEnter: string;
 	passwordInfo: string;
@@ -24,6 +25,7 @@ export class NewAccountPage {
 
 	createKeyStore() {
 		this.accountProvider.setPassword(this.password);
+		this.accountProvider.setName(this.userName);
 		try {
 			this.walletProvider.createNew();
 		} catch (error) {
