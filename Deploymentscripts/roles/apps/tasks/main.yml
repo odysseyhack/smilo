@@ -1,0 +1,50 @@
+---
+# file: roles/apps/tasks/main.yml
+
+- name: Alter the login message when a user logs in into the machine
+  lineinfile:
+    dest: "/etc/issue.net"
+    line: "THIS NODE CONTAINS KLM APPS!"
+    state: present
+
+- name: Copy docker-compose file
+  template:
+    src: "docker-compose.j2"
+    dest: "{{ klm_base_dir }}/docker-compose.yml"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0644
+
+- name: Log into aws
+  shell: $(aws ecr get-login --no-include-email  --region eu-west-1)
+  become: true
+  become_method: su
+  become_user: "{{ smilo_user }}"
+
+- name: Download latest docker container
+  shell: docker pull {{ item }}
+  become: true
+  become_method: su
+  become_user: "{{ smilo_user }}"
+  with_items:
+  - mongo:4.0-xenial
+  - 462619610638.dkr.ecr.eu-west-1.amazonaws.com/smilo/explorer:grabber
+  - 462619610638.dkr.ecr.eu-west-1.amazonaws.com/smilo/explorer:app
+
+- name: Copy docker environment files
+  template:
+    src: "app1.j2"
+    dest: "{{ klm_base_dir }}/app1.json"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0644
+
+- name: Start docker containers
+  command: docker-compose -f docker-compose.yml up -d --force-recreate
+  args:
+    chdir: "{{ klm_base_dir }}/"
+  register: output
+
+- name: Print result of Docker containers.
+  debug:
+    var: output
