@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BookSuccessPage } from '../book-success/book-success';
 import { BookedFlightsProvider } from '../../providers/booked-flights-provider/booked-flights-provider';
 import { IBookedFlight } from '../../interfaces/IBookedFlight';
+import { ContractProvider } from '../../providers/contract-provider/contract-provider';
 
 @IonicPage()
 @Component({
@@ -33,20 +34,39 @@ export class BookFlightPage {
 
 	constructor(private navCtrl: NavController, 
 				private navParams: NavParams,
-				private bookedFlightsProvider: BookedFlightsProvider) {
+				private bookedFlightsProvider: BookedFlightsProvider,
+				private contractProvider: ContractProvider) {
+		this.initialize();
+	}
+
+	async initialize() {
+		this.setToAndFromCity();
+		this.setDate();
+		this.setTravelers();
+		await this.contractProvider.connectToWeb3Provider();
+		await this.contractProvider.registerAccount();
+		await this.contractProvider.unlockAccount();
+	}
+
+	setToAndFromCity() {
 		this.from = this.getRandomCity();
 		let toRandomCity = this.getRandomCity();
 		while (toRandomCity === this.from) {
 			toRandomCity = this.getRandomCity();
 		}
 		this.to = toRandomCity;
+	}
+
+	setDate() {
 		this.date = new Date();
 		let randomAddDays = Math.floor(Math.random() * 50) + 1;
 		this.date.setDate(this.date.getDate() + randomAddDays);
+	}
+
+	setTravelers() {
 		let randomNumber = Math.floor(Math.random() * 10) + 1;
 		let adultText = randomNumber == 1 ? " Adult" : " Adults";
 		this.travellers = randomNumber + adultText;
-		console.log(this.date);
 	}
 
 	ionViewDidLoad() {
@@ -54,26 +74,19 @@ export class BookFlightPage {
 	}
 
 	processBookFlight(): void {
+		let randomNumber = Math.floor(Math.random() * 9999) + 1;
 		let bookedFlight = <IBookedFlight>{
 			from: this.from,
 			to: this.to,
 			date: this.date,
 			travellers: this.travellers,
-			flightId: "KLM-" + this.makeid(8),
+			flightId: "KL " + randomNumber,
 			smartContractAddress: "0x28r1289hd921fh21fh21feh8wf8wehf8ef"
 		}
-		this.bookedFlightsProvider.addToBookedFlights(bookedFlight);
-		this.navCtrl.push(BookSuccessPage, {bookedFlight: bookedFlight});
-	}
-
-	makeid(length): string {
-		var text = "";
-		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	  
-		for (var i = 0; i < length; i++)
-			text += possible.charAt(Math.floor(Math.random() * possible.length));
-	  
-		return text;
+		this.contractProvider.deployContract(bookedFlight);
+	
+		// this.bookedFlightsProvider.addToBookedFlights(bookedFlight);
+		// this.navCtrl.push(BookSuccessPage, {bookedFlight: bookedFlight});
 	}
 
 	getRandomCity(): string {
