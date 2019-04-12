@@ -1,0 +1,70 @@
+<div class="menu">
+    <div class="logo-container">
+        <img src="/assets/imgs/klm-logo.png" class="klm-sidebar-img">
+        <p class="logo-text">Blue Travel</p>
+        <img src="/assets/imgs/cross.png" class="cross-sidebar-img" (click)="shown = false">
+    </div>
+
+    <div class="options-container">
+        <div class="option">
+            <div class="image">
+                <img src="/assets/imgs/account.png">
+            </div>
+            <div class="text">
+                Account
+            </div>
+        </div>
+        <div class="option sub">
+            <div class="image">
+                <img src="/assets/imgs/account.png">
+            </div>
+            <div class="text">
+                e-Identity
+            </div>
+        </div>
+        <div class="option sub">
+            <div class="image">
+                <img src="/assets/imgs/document.png">
+            </div>
+            <div class="text">
+                e-Passport
+            </div>
+        </div>
+        <div class="option">
+            <div class="image">
+                <img src="/assets/imgs/global.png" class="global-icon">
+            </div>
+            <div class="text">
+                Travels
+            </div>
+        </div>
+        <div class="option sub" *ngFor="let flight of bookedFlights" (click)="goToTravelPage(flight)">
+            <div class="image">
+                <img src="/assets/imgs/airplane-up.png" class="airplane-icon">
+            </div>
+            <div class="text">
+                {{ flight.date | date: 'dd/MM/yyyy' }} - {{ flight.from }} -> {{ flight.to }}
+            </div>
+        </div>
+        <div class="option">
+            <div class="image">
+                <img src="/assets/imgs/timeline.png">
+            </div>
+            <div class="text">
+                Timeline
+            </div>
+        </div>
+        <div class="option">
+            <div class="image">
+                <img src="/assets/imgs/settings.png" class="settings-icon">
+            </div>
+            <div class="text">
+                Settings
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="close-area" (click)="shown = false">
+
+</div>

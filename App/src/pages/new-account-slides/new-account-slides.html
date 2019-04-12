@@ -1,0 +1,33 @@
+<ion-content padding>
+	<ion-slides #slides pager>
+		<ion-slide>
+			<h1 class="klm-header">Account</h1>
+			<div class="img center-img">
+				<img src="assets/imgs/account-secure.png">
+			</div>
+
+			<div class="content">
+				<div class="description-text">
+					Account successfully created. Make sure to back up your keys.
+				</div>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<h1 class="klm-header">Blockchain</h1>
+			<div class="img center-img">
+				<img src="assets/imgs/smilo-white-logo.png">
+			</div>
+
+			<div class="content">
+				<div class="description-text">
+					Secured by the Smilo Blockchain.
+					<br><br>
+					To complete the process you need to create an E-Identity and E-passport
+				</div>
+			</div>
+			<div class="klm-button-container">
+				<button class="klm-button" (click)="goToCreateEIdentityPage()">Create E-Identity</button>
+			</div>
+		</ion-slide>
+	</ion-slides>
+</ion-content>

@@ -1,0 +1,25 @@
+<ion-content padding>
+	<div class="klm-header-container">
+		<h1 class="klm-header">New Account</h1>
+	</div>
+	<div class="klm-input-fields-container">
+		<input type="text" class="klm-input" placeholder="username">
+		<input 
+			type="password" 
+			class="klm-input" 
+			placeholder="password" 
+			[(ngModel)]="password" 
+			(ngModelChange)="onPasswordChanged()">
+		<input 
+			type="password" 
+			class="klm-input" 
+			placeholder="repeat password"  
+			[(ngModel)]="passwordReEnter" 
+			(ngModelChange)="onPasswordChanged()">
+		<p class="password-info-text">{{ passwordInfo }}</p>
+	</div>
+
+	<div class="klm-button-container">
+		<button class="klm-button" [disabled]="passwordInfo || (!password || !passwordReEnter)" (click)="createKeyStore()">Create account</button>
+	</div>
+</ion-content>

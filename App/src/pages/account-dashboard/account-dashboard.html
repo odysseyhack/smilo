@@ -1,0 +1,13 @@
+<components-menu-bar [(shown)]="menuBarShown"></components-menu-bar>
+
+<ion-content padding>
+    <ion-icon class="sidemenu" name="menu" (click)="menuBarShown = true"></ion-icon>
+    <div class="klm-logo-container">
+        <img src="/assets/imgs/klm-logo-blue.png" alt="KLM">
+    </div>
+    <p class="username">Welcome username</p>
+    <div class="klm-button-container">
+        <button class="klm-button" (click)="goToBookFlight()">Book flight</button>
+        <button class="klm-button" (click)="goToCheckIn()">Check in</button>
+    </div>
+</ion-content>

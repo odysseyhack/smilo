@@ -1,0 +1,26 @@
+<ion-content padding>
+	<div class="klm-header-container">
+		<h1 class="klm-header">Create E-Identity</h1>
+	</div>
+    <div class="klm-input-fields-container">
+		<input 
+			type="text" 
+			class="klm-input" 
+			[(ngModel)]="fullName" 
+			placeholder="full name">
+		<input 
+			type="text" 
+			class="klm-input" 
+			[(ngModel)]="dateOfBirth" 
+			placeholder="date of birth">
+		<input 
+			type="text" 
+			class="klm-input" 
+			[(ngModel)]="nationality" 
+			placeholder="nationality">
+    </div>
+  
+    <div class="klm-button-container">
+      	<button class="klm-button" (click)="goToEIdentityCreatedPage()" [disabled]="!fullName || !dateOfBirth || !nationality">Create e-identity</button>
+    </div>
+</ion-content>

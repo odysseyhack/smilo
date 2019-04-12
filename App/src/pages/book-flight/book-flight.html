@@ -1,0 +1,23 @@
+<ion-content padding>
+	<components-back-button></components-back-button>
+	<div class="klm-header-container">
+		<h1 class="klm-header">Book Flight</h1>
+	</div>
+    <div class="main-info">
+		<div class="left-side-info-container">
+			<p class="info-left">From</p>
+			<p class="info-left">To</p>
+			<p class="info-left">Date</p>
+			<p class="info-left">Travellers</p>
+		</div>
+		<div class="right-side-info-container">
+			<p class="info-right">{{ from }}</p>
+			<p class="info-right">{{ to }}</p>
+			<p class="info-right">{{ date | date: 'dd/MM/yyyy'}}</p>
+			<p class="info-right">{{ travellers }}</p>
+		</div>
+	</div>
+	<div class="klm-button-container">
+		<button class="klm-button" (click)="processBookFlight()">Book</button>
+	</div>
+</ion-content>
