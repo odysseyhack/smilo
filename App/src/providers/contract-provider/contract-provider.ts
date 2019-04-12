@@ -95,7 +95,7 @@ export class ContractProvider {
     setVectors() {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
-        let vectors = "YO";
+        let vectors = "[" + this.identityProvider.getIdentity().faceVectors + "]";
         console.log('vectors:', vectors);
         console.log('priv:', this.walletProvider.getPrivateKey());
         flightpassContract.methods.setVectors(
@@ -118,8 +118,8 @@ export class ContractProvider {
         flightpassContract.options.address = this.contractAddress;
         flightpassContract.methods.getVectors().call({
             from: this.walletProvider.getPublicKey()
-        }).then(function() {
-            console.log(arguments);
+        }).then((vectors) => {
+            console.log('Vectors:', vectors);
         });
     }
 
@@ -128,9 +128,8 @@ export class ContractProvider {
         flightpassContract.options.address = this.contractAddress;
         flightpassContract.methods.getName().call({
             from: this.walletProvider.getPublicKey()
-        }).then(function() {
-            console.log("getName");
-            console.log(arguments);
+        }).then((name) => {
+            console.log('Name:', name);
         });
     }
 }
