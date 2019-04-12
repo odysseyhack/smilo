@@ -1,16 +1,25 @@
 [
 	{
 		"constant": false,
-		"inputs": [],
-		"name": "getVectors",
-		"outputs": [
+		"inputs": [
 			{
-				"name": "",
+				"name": "trustedAddress",
+				"type": "address"
+			},
+			{
+				"name": "name",
 				"type": "string"
 			}
 		],
-		"payable": true,
-		"stateMutability": "payable",
+		"name": "addTrusted",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -52,6 +61,78 @@
 		"type": "function"
 	},
 	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "vectors",
+				"type": "string"
+			}
+		],
+		"name": "setVectors",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"name": "ticket",
+				"type": "string"
+			},
+			{
+				"name": "flight",
+				"type": "string"
+			},
+			{
+				"name": "passport",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getFlight",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [],
 		"name": "getName",
@@ -80,72 +161,45 @@
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_vectors",
-				"type": "string"
-			}
-		],
-		"name": "setVectors",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "trustedAddress",
-				"type": "address"
-			},
-			{
-				"name": "name",
-				"type": "string"
-			}
-		],
-		"name": "addTrusted",
+		"constant": true,
+		"inputs": [],
+		"name": "getPassPort",
 		"outputs": [
 			{
 				"name": "",
-				"type": "bool"
+				"type": "string"
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "getTicket",
+		"outputs": [
 			{
-				"name": "name",
+				"name": "",
 				"type": "string"
-			},
-			{
-				"name": "owner",
-				"type": "address"
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "getVectors",
+		"outputs": [
 			{
-				"indexed": true,
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "newOwner",
-				"type": "address"
+				"name": "",
+				"type": "string"
 			}
 		],
-		"name": "OwnershipTransferred",
-		"type": "event"
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
 ]

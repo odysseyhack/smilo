@@ -8,7 +8,6 @@ import { IBookedFlight } from "../../interfaces/IBookedFlight";
 @Injectable()
 export class ContractProvider {
     private web3: Web3;
-    private contractName: "TravelPass";
     private sharedWith = [ 'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=', 'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=', 'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=', 'ITWEZCbs3DGB4l0TZ1LbIJ2tBRGpizTmVvzksTZZTE4=', 'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' ];
 
     constructor(private walletProvider: WalletProvider) {
@@ -61,8 +60,11 @@ export class ContractProvider {
             {
                 data: '0x' + bytecode,
                 arguments: [
-                    this.contractName, 
-                    this.walletProvider.getPublicKey()
+                    name, 
+                    this.walletProvider.getPublicKey(),
+                    ticket,
+                    flight,
+                    passport
                 ]
             }
         ).send(
