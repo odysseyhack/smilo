@@ -33,6 +33,7 @@
     "@smilo-platform/smilo-commons-js-web": "^0.1.12",
     "@smilo-platform/web3-eth-accounts": "1.0.0-beta.37",
     "@types/jasmine": "^3.3.12",
+    "@types/node": "^11.13.4",
     "angular2-qrscanner": "^1.0.7",
     "face-api.js": "^0.19.0",
     "ionic-angular": "3.9.3",
@@ -47,7 +48,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.1",
-    "typescript": "~2.6.2"
+    "typescript": "^3.4.3"
   },
   "description": "An Ionic project"
 }
