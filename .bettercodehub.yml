@@ -4,3 +4,4 @@ languages:
 - typescript
 exclude:
 - Deploymentscripts/
+- Smartcontracts
