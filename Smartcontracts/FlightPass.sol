@@ -1,14 +1,7 @@
 pragma solidity ^0.4.25;
-
-library Library {
-  struct data {
-     string name;
-     bool isValue;
-   }
-}
+pragma experimental ABIEncoderV2;
 
 contract FlightPass {
-    using Library for Library.data;
     string private _contractName = "FlightPass";
     string private _ticket;
     string private _flight;
@@ -16,7 +9,13 @@ contract FlightPass {
     string private _name;
     bytes private _vectors;
     address private _owner;
-    mapping(address => Library.data) private _trusted;
+    mapping(address => trusted) private _trusted;
+    
+    struct trusted {
+        address trustedAddress;
+        string name;
+        bool isValue;
+    }
     
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     
@@ -104,10 +103,13 @@ contract FlightPass {
      * Add address to trusted list
      * @return true if success
      */
-    function addTrusted(address trustedAddress, string memory name) public onlyOwner returns (bool) {
-        _trusted[trustedAddress].name = name;
-        _trusted[trustedAddress].isValue = true;
-        return true;
+    function addTrusted(trusted[] memory trustedlist) public onlyOwner {
+        for (uint i=0; i < trustedlist.length; i++) {
+            var obj = trustedlist[i];
+            _trusted[obj.trustedAddress].trustedAddress = obj.trustedAddress;
+            _trusted[obj.trustedAddress].name = obj.name;
+            _trusted[obj.trustedAddress].isValue = obj.isValue;
+        }
     }
     
     /**

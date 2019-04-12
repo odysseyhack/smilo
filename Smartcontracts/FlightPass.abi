@@ -3,21 +3,26 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "trustedAddress",
-				"type": "address"
-			},
-			{
-				"name": "name",
-				"type": "string"
+				"components": [
+					{
+						"name": "trustedAddress",
+						"type": "address"
+					},
+					{
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"name": "isValue",
+						"type": "bool"
+					}
+				],
+				"name": "trustedlist",
+				"type": "tuple[]"
 			}
 		],
 		"name": "addTrusted",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
