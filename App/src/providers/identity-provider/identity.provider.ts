@@ -22,6 +22,12 @@ export class IdentityProvider {
         );
     }
 
+    /**
+     * Updates the base identity properties.
+     * @param fullName 
+     * @param birthDate 
+     * @param nationality 
+     */
     public setIdentity(fullName: string, birthDate: Date, nationality: string) {
         this.identity.fullName = fullName;
         this.identity.birthDate = birthDate;
@@ -30,12 +36,20 @@ export class IdentityProvider {
         this.saveIdentity();
     }
 
+    /**
+     * Updates the passport
+     * @param passport
+     */
     public setPassport(passport: string) {
         this.identity.passport = passport;
 
         this.saveIdentity();
     }
 
+    /**
+     * Updates the face vectors
+     * @param faceVectors 
+     */
     public setFaceVectors(faceVectors: {x: number, y: number}[]) {
         this.identity.faceVectors = faceVectors;
 
@@ -46,7 +60,7 @@ export class IdentityProvider {
         this.accountProvider.encryptToStorage(IDENTITY_STORAGE_KEY, this.identity);
     }
 
-    public restoreIdentity() {
+    private restoreIdentity() {
         const restoredIdentity = this.accountProvider.decryptFromStorage<IIdentity>(IDENTITY_STORAGE_KEY);
 
         if(restoredIdentity) {
