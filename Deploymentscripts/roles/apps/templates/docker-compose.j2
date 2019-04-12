@@ -1,0 +1,20 @@
+version: "3.2"
+services:
+  openface:
+    container_name: openface
+    image: 462619610638.dkr.ecr.eu-west-1.amazonaws.com/smilo/explorer:grabber
+    restart: always
+    volumes:
+      - {{ klm_base_dir }}/config.json:/app/config.json
+    depends_on:
+      - 'explorer-mongo'
+  checkin:
+    container_name: explorer-app
+    ports:
+      - '80:3000'
+    image: 462619610638.dkr.ecr.eu-west-1.amazonaws.com/smilo/explorer:app
+    volumes:
+      - {{ klm_base_dir }}/config.json:/app/config.json
+    restart: always
+    depends_on:
+      - 'explorer-mongo'

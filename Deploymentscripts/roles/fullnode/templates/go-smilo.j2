@@ -1,0 +1,136 @@
+#!/bin/bash
+#
+# go-smilo		Start up the go-smilo node
+#
+# chkconfig: 2345 55 25
+# description: go-smilo is the smilo full-node.
+#
+### BEGIN INIT INFO
+# Provides:                 go-smilo
+# Required-Start:           go-smilo
+# Required-Stop:            go-smilo
+# Short-Description:        Start and stop go-smilo service.
+# Description:              -
+# Date-Creation:            -
+# Date-Last-Modification:   -
+# Author:                   -
+### END INIT INFO
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+# Name of the application
+app="go-smilo"
+
+## Bootoptions
+datadir="--datadir {{ smilo_base_dir }}/data"
+verbosity="--verbosity 2"
+networkid="--networkid {{ chain_id }}"
+bootnodes="--bootnodes {{ bootnodes_json }}"
+
+syncmode="--syncmode full" # --lightserv 50 <-- fucks up network stability
+mine="--mine"
+gasprice="--miner.gasprice 1"
+minerthreads="--miner.threads 1"
+port="--port 21000"
+# rpc="--rpc --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,net,shh,txpool,personal,web3,smilo,sport --rpccorsdomain '*' --rpcport 22000"
+# ws="--ws --wsaddr 0.0.0.0 --wsorigins '*' --wsapi personal,admin,db,eth,net,web3,miner,shh,txpool,debug --wsport 23000"
+ipc="--ipcpath {{ smilo_base_dir }}/data/smilo.ipc"
+password="--unlock 0x{{ unlockaccount }} --password {{ smilo_base_dir }}/data/account.txt"
+smilobft="--maxpeers 128 --smilobft.blockperiod 1 --smilobft.requesttimeout 10000" #  --smilobft.minfunds 0 --smilobft.permissioned=true
+disc="--v5disc" # --v5disc --nodiscover
+sport="{{ sport }}"
+
+rpc="--rpc --rpcaddr 0.0.0.0 --rpcapi db,eth,debug,net,shh,txpool,personal,web3,smilo,sport --rpccorsdomain '*' --rpcport 22000 --rpcvhosts=*"
+
+# $rpc $ws $bootnodes
+args="$datadir $verbosity $networkid $syncmode $smilobft $mine $gasprice $minerthreads $port $ipc $password $bootnodes $sport $rpc"
+
+# Start the service
+run() {
+  echo -n $"Starting $app:"
+  cd {{ smilo_base_dir }}/bin
+  echo "Starting server with args: $args $rpc" > /var/log/$app.log
+
+  daemon --user={{ smilo_user }} VAULT_IPC={{ smilo_base_dir }}/data/blackbox.ipc ./$app $args >> /var/log/$app.log 2>&1 &
+
+  sleep 1
+
+  status $app > /dev/null
+  # If application is running
+  if [[ $? -eq 0 ]]; then
+    # Store PID in lock file
+    echo $! > /var/lock/subsys/$app
+    success
+    echo
+  else
+    failure
+    echo
+  fi
+}
+
+# Start the service
+start() {
+  status $app > /dev/null
+  # If application is running
+  if [[ $? -eq 0 ]]; then
+    status $app
+  else
+    run
+  fi
+}
+
+# Restart the service
+stop() {
+  echo -n "Stopping $app: "
+  killproc $app
+  rm -f /var/lock/subsys/$app
+  echo
+}
+
+# Reload the service
+reload() {
+  status $app > /dev/null
+  # If application is running
+  if [[ $? -eq 0 ]]; then
+    echo -n $"Reloading $app:"
+    kill -HUP `pidof $app`
+    sleep 1
+    status $app > /dev/null
+    # If application is running
+    if [[ $? -eq 0 ]]; then
+      success
+      echo
+    else
+      failure
+      echo
+    fi
+  else
+    run
+  fi
+}
+
+# Main logic
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    status $app
+    ;;
+  restart)
+    stop
+    sleep 1
+    start
+    ;;
+  reload)
+    reload
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart|reload|status}"
+    exit 1
+esac
+exit 0

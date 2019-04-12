@@ -1,0 +1,22 @@
+# Test
+
+[nodes]
+34.249.59.138 key=1 unlockaccount='170ce250de1be1f83bbe5d24604538c9619bc02a'
+63.32.213.171 key=2 unlockaccount='d4e88d6eb5012a58be7db508136e955d86227353'
+63.34.247.30 key=3 unlockaccount='a984718e409cfbd2a054b411836411334bb6b625'
+99.81.37.98 key=4 unlockaccount='2682b5d4250370e249715e6530e0ee2952ab9edd'
+99.81.7.87 key=5 unlockaccount='6e9c44496220948787ff74e715128a7e1258b5a5'
+
+[services]
+99.81.78.54
+
+[test:children]
+services
+nodes
+
+[test:vars]
+ansible_user=ec2-user
+ansible_ssh_private_key_file=~/.ssh/KLM-Hackathon.pem
+ansible_become=yes
+ansible_become_method=sudo
+ansible_become_user=root

@@ -1,0 +1,102 @@
+---
+# file: roles/update/tasks/main.yml
+
+- name: Should i update?
+  set_fact:
+    update: false
+
+- name: Install get_latest_release file
+  template:
+    src: get_latest_release.sh
+    dest: "{{ smilo_base_dir }}/get_latest_release.sh"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0750
+
+- name: ensure version file exists
+  copy:
+    content: "v0.0.0"
+    dest: "{{ smilo_base_dir }}/installed_version"
+    force: no
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0640
+
+- name: Get latest version of Smilo
+  command: "{{ smilo_base_dir }}/get_latest_release.sh smilo-platform/go-smilo"
+  register: latest_release
+
+- name: Print latest version
+  debug:
+    var: latest_release.stdout
+
+- name: Get latest installed version of Smilo
+  command: "cat {{ smilo_base_dir }}/installed_version"
+  register: latest_installed
+
+- name: Print latest version
+  debug:
+    var: latest_installed.stdout
+
+- name: Should i update?
+  set_fact:
+    update: true
+  when: latest_installed.stdout != latest_release.stdout
+
+- name: Print Should i update?
+  debug:
+    var: update
+
+#### Update go-smilo when update == true
+- name: Stop go-smilo
+  service:
+    name: go-smilo
+    state: stopped
+  when: update == true
+
+- name: Make sure the file permissions are correct.
+  file:
+    path: "{{ smilo_base_dir }}"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    recurse: yes
+  when: update == true
+
+- name: Download latest Go-Smilo
+  get_url:
+    url: "https://github.com/Smilo-platform/go-smilo/releases/download/{{ latest_release.stdout }}/geth-linux-amd64"
+    dest: "{{ smilo_base_dir }}/bin/go-smilo"
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0700
+    force: yes
+  when: update == true
+
+- name: Start go-smilo
+  service:
+    name: go-smilo
+    state: started
+
+- name: Wait until the file {{ smilo_base_dir }}/data/smilo.ipc is present before continuing
+  wait_for:
+    path: "{{ smilo_base_dir }}/data/smilo.ipc"
+    delay: 5
+  when: update == true
+
+- name: Print enode
+  command: "{{ smilo_base_dir }}/bin/go-smilo --exec admin.nodeInfo attach {{ smilo_base_dir }}/data/smilo.ipc 2> /dev/null | grep enode"
+  register: enode
+
+- name: Print enode
+  debug:
+    var: enode.stdout_lines
+
+- name: Update version file with latest release {{ latest_release.stdout }}
+  copy:
+    content: "{{ latest_release.stdout }}"
+    dest: "{{ smilo_base_dir }}/installed_version"
+    force: yes
+    owner: "{{ smilo_user }}"
+    group: "{{ smilo_group }}"
+    mode: 0640
+  when: update == true
