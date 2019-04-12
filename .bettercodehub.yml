@@ -3,4 +3,4 @@ languages:
 - solidity
 - typescript
 exclude:
-- /Deploymentscripts
+- Deploymentscripts/

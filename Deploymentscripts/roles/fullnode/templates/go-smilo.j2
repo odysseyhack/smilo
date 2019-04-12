@@ -41,7 +41,7 @@ smilobft="--maxpeers 128 --smilobft.blockperiod 1 --smilobft.requesttimeout 1000
 disc="--v5disc" # --v5disc --nodiscover
 sport="{{ sport }}"
 
-rpc="--rpc --rpcaddr 0.0.0.0 --rpcapi db,eth,debug,net,shh,txpool,personal,web3,smilo,sport --rpccorsdomain '*' --rpcport 22000 --rpcvhosts=*"
+rpc="--rpc --rpcaddr 0.0.0.0 --rpcapi db,eth,debug,net,shh,txpool,personal,web3,smilobft,sport --rpccorsdomain '*' --rpcport 22000 --rpcvhosts=*"
 
 # $rpc $ws $bootnodes
 args="$datadir $verbosity $networkid $syncmode $smilobft $mine $gasprice $minerthreads $port $ipc $password $bootnodes $sport $rpc"
@@ -50,7 +50,7 @@ args="$datadir $verbosity $networkid $syncmode $smilobft $mine $gasprice $minert
 run() {
   echo -n $"Starting $app:"
   cd {{ smilo_base_dir }}/bin
-  echo "Starting server with args: $args $rpc" > /var/log/$app.log
+  echo "Starting server with args: $args" > /var/log/$app.log
 
   daemon --user={{ smilo_user }} VAULT_IPC={{ smilo_base_dir }}/data/blackbox.ipc ./$app $args >> /var/log/$app.log 2>&1 &
 
