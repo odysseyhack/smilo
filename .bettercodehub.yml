@@ -5,3 +5,7 @@ exclude:
 - /Deploymentscripts/
 - /Smartcontracts/
 - /App/src/smartcontracts/smartcontracts.ts
+- /App/www/
+- /App/src/providers/contract-provider/contract-provider.ts
+- /App/src/app/app.component.ts
+- /App/src/components/components-menu-bar/components-menu-bar.ts

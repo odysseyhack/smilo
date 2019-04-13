@@ -33,4 +33,8 @@ export class StorageProvider implements IStorageProvider {
     readAsJSON<T>(key: string): T {
         return JSON.parse(this.read(key));
     }
+
+    deleteEverything() {
+        localStorage.clear();
+    }
 }

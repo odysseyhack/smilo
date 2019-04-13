@@ -52,6 +52,7 @@ import { ContractProvider } from '../providers/contract-provider/contract-provid
 import { FaucetProvider } from '../providers/faucet-provider/faucet-provider';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FaceVectorProvider } from '../providers/face-vector/face-vector.provider';
+import { BaseUrlProvider } from '../providers/url-provider/url-provider';
 
 @NgModule({
 	declarations: [
@@ -111,7 +112,8 @@ import { FaceVectorProvider } from '../providers/face-vector/face-vector.provide
 		AccountProvider,
 		IdentityProvider,
 		FaucetProvider,
-		FaceVectorProvider
+		FaceVectorProvider,
+		BaseUrlProvider
 	]
 })
 export class AppModule {

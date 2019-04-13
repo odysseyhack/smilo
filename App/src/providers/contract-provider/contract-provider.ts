@@ -7,6 +7,8 @@ import { IBookedFlight } from "../../interfaces/IBookedFlight";
 import { IdentityProvider } from "../identity-provider/identity.provider";
 import { ITrusted } from "../../interfaces/ITrusted";
 import { AccountProvider } from "../account-provider/account.provider";
+import { HttpClient } from "@angular/common/http";
+import { BaseUrlProvider } from "../url-provider/url-provider";
 
 const CONTRACT_ADDRESS_KEY = "contract";
 
@@ -14,18 +16,35 @@ const CONTRACT_ADDRESS_KEY = "contract";
 export class ContractProvider {
     private web3: Web3;
     private contractAddress: string;
-    private sharedWith = [ 'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=', 'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=', 'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=', 'ITWEZCbs3DGB4l0TZ1LbIJ2tBRGpizTmVvzksTZZTE4=', 'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' ];
+    private initialized: boolean;
+    private sharedWithDeploy = [ 
+        'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=',
+        'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=',
+        'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=',
+        'ITWEZCbs3DGB4l0TZ1LbIJ2tBRGpizTmVvzksTZZTE4=',
+        'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' 
+    ];
+
+    private sharedWithUpdate = [ 
+        'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=',
+        'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=',
+        'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=',
+        'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' 
+    ];
 
     constructor(
         private walletProvider: WalletProvider,
         private identityProvider: IdentityProvider,
-        private accountProvider: AccountProvider
+        private accountProvider: AccountProvider,
+        private baseUrlProvider: BaseUrlProvider,
+        private http: HttpClient
     ) {
         this.walletProvider.onWalletUnlocked().subscribe(
             async () => {
                 await this.connectToWeb3Provider();
                 await this.registerAccount();
                 await this.unlockAccount();
+                this.initialized = true;
             }
         );
 
@@ -35,7 +54,11 @@ export class ContractProvider {
     }
 
     connectToWeb3Provider() {
-        this.web3 = new Web3("http://node1.klm.smilo.network:22000");
+        this.web3 = new Web3("http://node0.klm.smilo.network:22000");
+    }
+
+    isInitialized(): boolean {
+        return this.initialized;
     }
 
     async registerAccount() {
@@ -47,7 +70,7 @@ export class ContractProvider {
                     privateKey, 
                     privateKey
             );
-            console.log(accountImport);
+            console.log('Account imported:', accountImport);
         } catch(e) {
             console.log("Import failed: " + e);
         }
@@ -86,7 +109,7 @@ export class ContractProvider {
             from: this.walletProvider.getPublicKey(),
             gas: '4000000',
             gasPrice: '0',
-            sharedWith: this.sharedWith
+            sharedWith: this.sharedWithDeploy
         }).on('error', (error) => {
             console.log(`Error deploying contract ${error}`);
         }).on('transactionHash', (transactionHash) => {
@@ -106,15 +129,16 @@ export class ContractProvider {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
         let vectors = "[" + this.identityProvider.getIdentity().faceVectors + "]";
-        console.log('vectors:', vectors);
-        console.log('priv:', this.walletProvider.getPrivateKey());
+        console.log('setVectors this.contractAddress:', this.contractAddress);
+        console.log('setVectors vectors:', vectors);
+        console.log('setVectors priv:', this.walletProvider.getPrivateKey());
         return flightpassContract.methods.setVectors(
             vectors
         ).send({
             from: this.walletProvider.getPublicKey(),
             gas: '2000000',
             gasPrice: '0',
-            sharedWith: this.sharedWith
+            sharedWith: this.sharedWithUpdate
         });
     }
 
@@ -149,11 +173,32 @@ export class ContractProvider {
             from: this.walletProvider.getPublicKey(),
             gas: '2000000',
             gasPrice: '0',
-            sharedWith: this.sharedWith
+            sharedWith: this.sharedWithUpdate
         }, (error, result) => {
             console.log('addTrusted error:', error);
             console.log('addTrusted result:', result);
         });
+    }
+
+    deleteContract(): Promise<string[]> {
+        console.log('DOING DELETE REQUEST!');
+        let deleteArray = [
+            this.http.delete(`${this.baseUrlProvider.getBaseUrlNode1()}/transactions/${this.contractAddress}`).toPromise().then((data: string) => { return data }),
+            this.http.delete(`${this.baseUrlProvider.getBaseUrlNode2()}/transactions/${this.contractAddress}`).toPromise().then((data: string) => { return data }),
+            this.http.delete(`${this.baseUrlProvider.getBaseUrlNode3()}/transactions/${this.contractAddress}`).toPromise().then((data: string) => { return data }),
+            this.http.delete(`${this.baseUrlProvider.getBaseUrlNode4()}/transactions/${this.contractAddress}`).toPromise().then((data: string) => { return data }),
+            this.http.delete(`${this.baseUrlProvider.getBaseUrlNode5()}/transactions/${this.contractAddress}`).toPromise().then((data: string) => { return data })
+        ];
+        return Promise.all(deleteArray);
+    }
+
+    async allowAllGates() {
+        let trustedArray: ITrusted[] = [];
+        trustedArray.push(<ITrusted>{name: "KLM Server", trustedAddress: "0x170ce250de1be1f83bbe5d24604538c9619bc02a", isValue: true});
+        trustedArray.push(<ITrusted>{name: "Gate 1", trustedAddress: "0xd4e88d6eb5012a58be7db508136e955d86227353", isValue: true});
+        trustedArray.push(<ITrusted>{name: "Gate 2", trustedAddress: "0xa984718e409cfbd2a054b411836411334bb6b625", isValue: true});
+        trustedArray.push(<ITrusted>{name: "Gate 4", trustedAddress: "0x6e9c44496220948787ff74e715128a7e1258b5a5", isValue: true});
+        await this.addTrusted(trustedArray);
     }
 
     save() {

@@ -7,6 +7,12 @@
     line: "THIS NODE CONTAINS KLM APPS!"
     state: present
 
+- name: Copy nginx config file
+  template:
+    src: "nginx.default.conf"
+    dest: "{{ klm_base_dir }}/nginx.conf"
+    mode: 0664
+
 - name: Copy docker-compose file
   template:
     src: "docker-compose.j2"
@@ -27,17 +33,16 @@
   become_method: su
   become_user: "{{ smilo_user }}"
   with_items:
-  - mongo:4.0-xenial
-  - 462619610638.dkr.ecr.eu-west-1.amazonaws.com/smilo/explorer:grabber
-  - 462619610638.dkr.ecr.eu-west-1.amazonaws.com/smilo/explorer:app
+  - 462619610638.dkr.ecr.eu-west-1.amazonaws.com/klm/app:latest
+  - 462619610638.dkr.ecr.eu-west-1.amazonaws.com/klm/gate:latest
 
-- name: Copy docker environment files
-  template:
-    src: "app1.j2"
-    dest: "{{ klm_base_dir }}/app1.json"
-    owner: "{{ smilo_user }}"
-    group: "{{ smilo_group }}"
-    mode: 0644
+# - name: Copy docker environment files
+#   template:
+#     src: "app1.j2"
+#     dest: "{{ klm_base_dir }}/app1.json"
+#     owner: "{{ smilo_user }}"
+#     group: "{{ smilo_group }}"
+#     mode: 0644
 
 - name: Start docker containers
   command: docker-compose -f docker-compose.yml up -d --force-recreate

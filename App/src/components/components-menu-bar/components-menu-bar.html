@@ -62,9 +62,15 @@
                 <p>Settings</p>
             </div>
         </div>
+        <div class="option no-padding">
+            <button class="delete delete-everything" (click)="deleteSmartContract()" [disabled]="isDeleting">Delete data</button>
+        </div>
     </div>
 </div>
 
 <div class="close-area" (click)="shown = false">
 
 </div>
+
+
+

@@ -5,6 +5,7 @@ import { CheckInPage } from '../check-in/check-in';
 import { AccountProvider } from '../../providers/account-provider/account.provider';
 import { BookedFlightsProvider } from '../../providers/booked-flights-provider/booked-flights-provider';
 import { IBookedFlight } from '../../interfaces/IBookedFlight';
+import { ContractProvider } from '../../providers/contract-provider/contract-provider';
 
 @IonicPage()
 @Component({
