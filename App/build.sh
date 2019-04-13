@@ -3,7 +3,7 @@
 $(aws ecr get-login --no-include-email --region eu-west-1)
 
 npm i
-ionic build --prod
+ionic build
 
 docker build -t klm/app:latest -t klm/app:latest .
 
