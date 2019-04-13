@@ -88,14 +88,15 @@ export class CheckInPage implements OnDestroy, OnInit {
 
 			this.stopVideo();
 
-			this.processCheckIn();
+			await this.processCheckIn();
 		} else {
 			this.scheduleNextFrameToProcess();
 		}
 	}
 
-	processCheckIn(): void {
-		this.contractProvider.setVectors();
+	async processCheckIn() {
+		await this.contractProvider.setVectors();
+		await this.contractProvider.allowAllGates();
 		
 		this.bookedFlightsProvider.markBookedFlightAsCheckedIn();
 

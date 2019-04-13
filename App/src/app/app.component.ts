@@ -19,8 +19,6 @@ export class KLMApp {
 
 	constructor(
         private platform: Platform, 
-        private statusBar: StatusBar, 
-        private splashScreen: SplashScreen,
         private accountProvider: AccountProvider,
         private walletProvider: WalletProvider,
         private identityProvider: IdentityProvider,
@@ -28,8 +26,6 @@ export class KLMApp {
         private contractProvider: ContractProvider
     ) {
 		this.platform.ready().then(async () => {
-            this.statusBar.styleDefault();
-            this.splashScreen.hide();
 
             if (this.accountProvider.accountExists()) {
                 this.rootPage = UnlockKeystorePage;

@@ -15,7 +15,6 @@ export class BookFlightPage {
 	to: string;
 	date: Date;
 	travellers: string;
-	initializeComplete: boolean;
 	cities = [
 		"Amsterdam",
 		"Barcelona",
@@ -44,7 +43,6 @@ export class BookFlightPage {
 		this.setToAndFromCity();
 		this.setDate();
 		this.setTravelers();
-		this.initializeComplete = true;
 	}
 
 	setToAndFromCity() {

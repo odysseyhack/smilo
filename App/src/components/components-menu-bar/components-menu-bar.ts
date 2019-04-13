@@ -3,6 +3,9 @@ import { NavController } from 'ionic-angular';
 import { IBookedFlight } from '../../interfaces/IBookedFlight';
 import { BookedFlightsProvider } from '../../providers/booked-flights-provider/booked-flights-provider';
 import { TravelPage } from '../../pages/travel/travel';
+import { ContractProvider } from '../../providers/contract-provider/contract-provider';
+import { StorageProvider } from '../../providers/storage-provider/storage-provider';
+import { HomePage } from '../../pages/home/home';
 
 @Component({
     selector: 'components-menu-bar',
@@ -10,6 +13,7 @@ import { TravelPage } from '../../pages/travel/travel';
 })
 export class ComponentsMenuBarComponent {
     bookedFlight: IBookedFlight;
+    isDeleting: boolean;
 
     @Output() 
     shownChange: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -26,11 +30,31 @@ export class ComponentsMenuBarComponent {
 
     constructor(private element: ElementRef,
                 private navController: NavController,
+                private contractProvider: ContractProvider,
+                private storageProvider: StorageProvider,
 				private bookedFlightsProvider: BookedFlightsProvider) {
         this.bookedFlight = this.bookedFlightsProvider.getBookedFlight();
     }
 
     goToTravelPage(bookedFlight: IBookedFlight): void {
 		this.navController.push(TravelPage, {bookedFlight: bookedFlight});
-	}
+    }
+    
+    deleteSmartContract() {
+        this.isDeleting = true;
+		console.log('Delete smart contract!')
+		this.contractProvider.deleteContract().then(data => {
+            console.log('Delete success:', data);
+            this.clearWholeLocalStorage();
+		}).catch(error => {
+			console.log('Delete failed:', error);
+		});
+    }
+    
+    clearWholeLocalStorage() {
+        console.log('Clearing whole local storage!');
+        this.storageProvider.deleteEverything();
+        this.navController.setRoot(HomePage);
+        this.isDeleting = false;
+    }
 }

@@ -17,8 +17,8 @@
 			<p class="info-right">{{ travellers }}</p>
 		</div>
 	</div>
-	<p *ngIf="!initializeComplete" class="booking-information">Getting your booking information...</p>
+	<p *ngIf="!contractProvider.isInitialized()" class="booking-information">Getting your booking information...</p>
 	<div class="klm-button-container">
-		<button class="klm-button" (click)="processBookFlight()" [disabled]="!initializeComplete">Book</button>
+		<button class="klm-button" (click)="processBookFlight()" [disabled]="!contractProvider.isInitialized()">Book</button>
 	</div>
 </ion-content>
