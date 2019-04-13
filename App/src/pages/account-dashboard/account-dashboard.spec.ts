@@ -39,4 +39,27 @@ describe("AccountDashboardPage", () => {
 
     it("should create component", () => expect(comp).toBeDefined());
 
+    it("should have menuBarShown on false", () => {
+
+        expect(comp.menuBarShown).toBeFalsy();
+
+        expect(comp.menuBarShown).not.toBeTruthy();
+
+    });
+
+    it("should have accountName as null", () => {
+
+        expect(comp.accountName).toBeNull();
+
+        expect(comp.accountName).not.toBeDefined();
+
+    });
+
+    it("should have bookedFlight as null", () => {
+
+        expect(comp.bookedFlight).toBeNull();
+
+        expect(comp.bookedFlight).not.toBeDefined();
+
+    });
 });

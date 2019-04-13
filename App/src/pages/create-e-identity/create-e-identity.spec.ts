@@ -39,4 +39,27 @@ describe("CreateEIdentityPage", () => {
 
     it("should create component", () => expect(comp).toBeDefined());
 
+    it("should have fullName to be null", () => {
+
+        expect(comp.fullName).toBeNull();
+
+        expect(comp.fullName).not.toBeDefined();
+
+    });
+
+    it("should have dateOfBirth to be null", () => {
+
+        expect(comp.dateOfBirth).toBeNull();
+
+        expect(comp.dateOfBirth).not.toBeDefined();
+
+    });
+
+    it("should have nationality to be null", () => {
+        
+        expect(comp.nationality).toBeNull();
+
+        expect(comp.nationality).not.toBeDefined();
+
+    });
 });

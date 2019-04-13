@@ -39,4 +39,27 @@ describe("CheckInPage", () => {
 
     it("should create component", () => expect(comp).toBeDefined());
 
+    it("should have videoPlayer to be null", () => {
+
+        expect(comp.videoPlayer).toBeNull();
+
+        expect(comp.videoPlayer).not.toBeDefined();
+
+    });
+
+    it("should have faceScan to be null", () => {
+
+        expect(comp.faceScan).toBeNull();
+
+        expect(comp.faceScan).not.toBeDefined();
+
+    });
+
+    it("should have booking to be null", () => {
+
+        expect(comp.booking).toBeNull();
+
+        expect(comp.booking).not.toBeDefined();
+
+    });
 });

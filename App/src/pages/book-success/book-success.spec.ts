@@ -39,4 +39,11 @@ describe("BookSuccess", () => {
 
     it("should create component", () => expect(comp).toBeDefined());
 
+    it("should have bookedFlight to be null", () => {
+
+        expect(comp.bookedFlight).toBeNull();
+
+        expect(comp.bookedFlight).not.toBeDefined();
+
+    });
 });

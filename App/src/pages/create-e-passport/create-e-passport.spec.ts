@@ -39,4 +39,20 @@ describe("CreateEPassportPage", () => {
 
     it("should create component", () => expect(comp).toBeDefined());
 
+    it("should have doFlashCamera to be null", () => {
+
+        expect(comp.doFlashCamera).toBeNull();
+
+        expect(comp.doFlashCamera).not.toBeDefined();
+
+    });
+
+    it("should have passport to be null", () => {
+
+        expect(comp.passport).toBeNull();
+
+        expect(comp.passport).not.toBeDefined();
+
+    });
+
 });

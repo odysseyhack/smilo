@@ -11,8 +11,4 @@ describe("AccountProvider", () => {
 
         accountProvider = new AccountProvider(storageProvider)
     })
-
-    it("should do something", () => {
-        expect(true).toBe(true);
-    });
 });
