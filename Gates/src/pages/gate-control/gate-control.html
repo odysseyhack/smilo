@@ -3,6 +3,10 @@
     <div class="main-middle-container" >
         <div (click)="manualPhoto()" class="camera-title"
             [ngSwitch]="state">
+            <p *ngSwitchCase="'loading'">
+                Hang on! We are getting things ready!
+            </p>
+
             <p *ngSwitchCase="'default'">
                 Please stand in front of the camera
             </p>
