@@ -54,7 +54,7 @@ export class ContractProvider {
     }
 
     connectToWeb3Provider() {
-        this.web3 = new Web3("http://node0.klm.smilo.network:22000");
+        this.web3 = new Web3("https://node0.klm.smilo.network:443");
     }
 
     isInitialized(): boolean {
