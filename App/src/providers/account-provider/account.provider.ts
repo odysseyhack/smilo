@@ -7,6 +7,24 @@ import { Observable } from "rxjs";
 
 const ACCOUNT_KEY = "account";
 
+export interface IAcountProvider {
+    accountExists(): boolean;
+
+    setName(name: string);
+
+    getName(): string;
+
+    onPasswordChanged(): Observable<void>;
+
+    setPassword(password: string);
+
+    encryptToStorage(key: string, data: any);
+
+    decryptFromStorage<T>(key: string): T;
+
+    isCorrectPassword(password: string): boolean;
+}
+
 @Injectable()
 export class AccountProvider {
     private password: string;

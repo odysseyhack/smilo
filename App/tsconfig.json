@@ -11,15 +11,22 @@
     "module": "es2015",
     "moduleResolution": "node",
     "sourceMap": true,
-    "target": "es5"
+    "target": "es5",
+    "baseUrl": "./src",
+    "paths": {
+      "@ionic-mocks/*": ["mocks/ionic/*"],
+      "@provider-mocks/*": ["mocks/providers/*"]
+    },
+    "types": [
+      "jasmine",
+      "node"
+    ]
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    // "src/**/*.spec.ts",
-    // "src/**/__tests__/*.ts"
+    "node_modules"
   ],
   "compileOnSave": false,
   "atom": {
