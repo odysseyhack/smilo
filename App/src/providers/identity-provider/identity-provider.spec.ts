@@ -1,14 +1,13 @@
 import "jasmine";
-import { AccountProvider } from "./account.provider";
+import { IdentityProvider } from "./identity.provider";
 import { StorageProvider } from "../storage-provider/storage-provider";
 
-describe("AccountProvider", () => {
-    let accountProvider: AccountProvider;
+describe("IdentityProvider", () => {
+    let identityProvider: IdentityProvider;
     let storageProvider: StorageProvider;
 
     beforeEach(() => {
         storageProvider = new StorageProvider();
 
-        accountProvider = new AccountProvider(storageProvider)
     })
 });

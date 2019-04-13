@@ -1,14 +1,13 @@
 import "jasmine";
-import { AccountProvider } from "./account.provider";
+import { FaceVectorProvider } from "./face-vector.provider";
 import { StorageProvider } from "../storage-provider/storage-provider";
 
-describe("AccountProvider", () => {
-    let accountProvider: AccountProvider;
+describe("FaceVectorProvider", () => {
+    let faceVectorProvider: FaceVectorProvider;
     let storageProvider: StorageProvider;
 
     beforeEach(() => {
         storageProvider = new StorageProvider();
 
-        accountProvider = new AccountProvider(storageProvider)
     })
 });

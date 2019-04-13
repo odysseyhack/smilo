@@ -15,8 +15,6 @@ export class FaceVectorProvider {
         await faceapi.nets.ssdMobilenetv1.loadFromUri('./assets/models');
         await faceapi.nets.faceLandmark68Net.loadFromUri('./assets/models');
         await faceapi.nets.faceRecognitionNet.loadFromUri('./assets/models');
-
-        console.log("Face vector models initialized");
     }
 
     /**

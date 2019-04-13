@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { IonicModule, NavParams, NavController } from "ionic-angular/index";
-import { AccountDashboardPage } from "./account-dashboard";
+import { CreateEPassportPage } from "./create-e-passport";
 import { MockNavController } from "../../../test-config/mocks/MockNavController"
 import { MockAccountProvider } from "../../../test-config/mocks/MockAccountProvider";
 import { MockBookedFlightsProvider } from "../../../test-config/mocks/MockBookedFlightsProvider";
@@ -8,9 +8,9 @@ import { ComponentsModule } from "../../components/components-menu-bar/component
 import { AccountProvider } from "../../providers/account-provider/account.provider";
 import { BookedFlightsProvider } from "../../providers/booked-flights-provider/booked-flights-provider";
 
-describe("AccountDashboardPage", () => {
-    let comp: AccountDashboardPage;
-    let fixture: ComponentFixture<AccountDashboardPage>;
+describe("CreateEPassportPage", () => {
+    let comp: CreateEPassportPage;
+    let fixture: ComponentFixture<CreateEPassportPage>;
     let navController: MockNavController;
     let accountProvider: MockAccountProvider;
     let bookedFlightsProvider: MockBookedFlightsProvider;
@@ -19,9 +19,9 @@ describe("AccountDashboardPage", () => {
         navController = new MockNavController();
 
         TestBed.configureTestingModule({
-            declarations: [AccountDashboardPage],
+            declarations: [CreateEPassportPage],
             imports: [
-                IonicModule.forRoot(AccountDashboardPage),
+                IonicModule.forRoot(CreateEPassportPage),
                 ComponentsModule
             ],
             providers: [
@@ -33,33 +33,26 @@ describe("AccountDashboardPage", () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(AccountDashboardPage);
+        fixture = TestBed.createComponent(CreateEPassportPage);
         comp = fixture.componentInstance;
     });
 
     it("should create component", () => expect(comp).toBeDefined());
 
-    it("should have menuBarShown on false", () => {
+    it("should have doFlashCamera to be null", () => {
 
-        expect(comp.menuBarShown).toBeFalsy();
+        expect(comp.doFlashCamera).toBeNull();
 
-        expect(comp.menuBarShown).not.toBeTruthy();
-
-    });
-
-    it("should have accountName as null", () => {
-
-        expect(comp.accountName).toBeNull();
-
-        expect(comp.accountName).not.toBeDefined();
+        expect(comp.doFlashCamera).not.toBeDefined();
 
     });
 
-    it("should have bookedFlight as null", () => {
+    it("should have passport to be null", () => {
 
-        expect(comp.bookedFlight).toBeNull();
+        expect(comp.passport).toBeNull();
 
-        expect(comp.bookedFlight).not.toBeDefined();
+        expect(comp.passport).not.toBeDefined();
 
     });
+
 });
