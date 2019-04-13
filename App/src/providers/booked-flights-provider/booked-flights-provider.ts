@@ -5,6 +5,16 @@ import { ReplaySubject } from "rxjs";
 
 const BOOKINGS_KEY = "bookings";
 
+export interface IBookedFlightsProvider {
+    onBookedFlightChanged();
+    
+    setBookedFlight(bookedFlight: IBookedFlight);
+
+    markBookedFlightAsCheckedIn();
+
+    getBookedFlight(): IBookedFlight;
+}
+
 @Injectable()
 export class BookedFlightsProvider  {
     private bookedFlight: IBookedFlight;
