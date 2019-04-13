@@ -11,6 +11,9 @@ import { GateCheckInPageModule } from '../pages/gate-check-in/gate-check-in.modu
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { GateControlPageModule } from '../pages/gate-control/gate-control.module';
+import { FaceVectorProvider } from '../providers/face-vector/face-vector.provider';
+import { AuthProvider } from '../providers/auth/auth.provider';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -32,7 +35,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 			}
 		}),
 		IonicModule.forRoot(MyApp),
-		GateCheckInPageModule
+		GateCheckInPageModule,
+		GateControlPageModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -43,6 +47,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		StatusBar,
 		TitleProvider,
 		SplashScreen,
+		FaceVectorProvider,
+		AuthProvider,
 		{
 			provide: ErrorHandler, 
 			useClass: IonicErrorHandler

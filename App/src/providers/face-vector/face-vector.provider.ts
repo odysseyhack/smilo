@@ -25,6 +25,8 @@ export class FaceVectorProvider {
      */
     async startFaceAnalysis(input: HTMLImageElement | HTMLVideoElement): Promise<IFaceScanResult> {
         const faceScan = await faceapi.detectSingleFace(input).withFaceLandmarks().withFaceDescriptor();
+        if(!faceScan || !faceScan.detection)
+            return null;
 
         const result: IFaceScanResult = {
             confidence: faceScan.detection.score,

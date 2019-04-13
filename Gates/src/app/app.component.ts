@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { GateCheckInPage } from '../pages/gate-check-in/gate-check-in';
 import { TitleProvider } from '../providers/title-provider';
+import { GateControlPage } from '../pages/gate-control/gate-control';
 
 declare var process: { env: { [key: string]: string | undefined; } };
 
@@ -8,7 +9,7 @@ declare var process: { env: { [key: string]: string | undefined; } };
   	templateUrl: 'app.html'
 })
 export class MyApp {
-	rootPage:any = GateCheckInPage;
+	rootPage:any = GateControlPage;
 
 	constructor(private titleProvider: TitleProvider) {
 		let gate = process.env.GATE_TYPE;
