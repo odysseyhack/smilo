@@ -71,7 +71,7 @@ export class GateControlPage implements OnInit, OnDestroy {
 	async processFrame() {
 		const faceScan = await this.faceVectorProvider.startFaceAnalysis(this.videoPlayer.nativeElement);
 
-		if(faceScan && faceScan.confidence > 0.95) {
+		if(faceScan && this.hasFace(faceScan) && this.isHappy(faceScan)) {
             this.faceScan = faceScan;
             
             this.state = "processing";
@@ -86,5 +86,12 @@ export class GateControlPage implements OnInit, OnDestroy {
 		} else {
 			this.scheduleNextFrameToProcess();
 		}
+    }
+
+    private hasFace(faceScan: IFaceScanResult): boolean {
+        return faceScan.confidence > 0.95;
+    }
+    private isHappy(faceScan: IFaceScanResult): boolean {
+        return faceScan.expressions.find(x => x.expression == "happy").probability > 0.8;
     }
 }
