@@ -7,20 +7,31 @@ page-check-in {
     }
 
     .video-container {
-        margin-top: 50px;
         width: 100%;
 
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        span {
-            font-size: 20px;
-            text-align: center;
-        }
-
         video {
             width: 80%;
+        }
+
+        p {
+            font-size: 20px;
+            text-align: center;
+
+            &.error {
+                color: red;
+            }
+        }
+
+        button {
+            margin-top: 30px;
+        }
+
+        ion-spinner {
+            margin-top: 50px;
         }
     }
 

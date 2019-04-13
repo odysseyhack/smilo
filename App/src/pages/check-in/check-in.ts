@@ -29,6 +29,9 @@ export class CheckInPage implements OnDestroy, OnInit {
 	public isCheckingIn: boolean;
 	public checkingError: string;
 
+	public isProcessingImage: boolean;
+	public imageFailed: boolean;
+
 	constructor(
 		private navCtrl: NavController,
 		private faceVectorProvider: FaceVectorProvider,
@@ -46,10 +49,6 @@ export class CheckInPage implements OnDestroy, OnInit {
 			await this.startVideo();
 	
 			await this.faceVectorProvider.initialize();
-	
-			setTimeout(() => {
-				this.scheduleNextFrameToProcess()
-			}, 1000);
 		}, 1000);
 	}
 
@@ -79,26 +78,26 @@ export class CheckInPage implements OnDestroy, OnInit {
 		}
 	}
 
-	scheduleNextFrameToProcess() {
-		this.timeoutId = setTimeout(async () => {
-			this.processFrame();
-		}, 500);
-	}
+	processFrame() {
+		this.isProcessingImage = true;
+		this.imageFailed = false;
+		setTimeout(async () => {
+			const faceScan = await this.faceVectorProvider.startFaceAnalysis(this.videoPlayer.nativeElement);
 
-	async processFrame() {
-		const faceScan = await this.faceVectorProvider.startFaceAnalysis(this.videoPlayer.nativeElement);
-
-		if(faceScan.confidence > 0.95) {
-			this.faceScan = faceScan;
-
-			this.identityProvider.setFaceVectors(this.faceScan.vectors);
-
-			this.stopVideo();
-
-			this.processCheckIn();
-		} else {
-			this.scheduleNextFrameToProcess();
-		}
+			if(faceScan && faceScan.confidence > 0.95) {
+				this.faceScan = faceScan;
+	
+				this.identityProvider.setFaceVectors(this.faceScan.vectors);
+	
+				this.stopVideo();
+	
+				this.processCheckIn();
+			} else {
+				// Could not take proper picture
+				this.imageFailed = true;
+				this.isProcessingImage = false;
+			}
+		}, 10)
 	}
 
 	async processCheckIn() {

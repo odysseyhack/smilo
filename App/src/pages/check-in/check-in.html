@@ -22,11 +22,17 @@
 	</div>
 
 	<div class="video-container" *ngIf="!isCheckingIn; else isCheckingInView">
-		<span>We are scanning your face. Hang on...</span>
-		
-		<video autoplay width="300" height="400" #videoplayer></video>
+		<p>We are scanning your face. Hang on...</p>
 
-		<ion-spinner></ion-spinner>
+		<p>For best results: make sure you look straight into the camera!</p>
+
+		<p class="error" *ngIf="imageFailed">Could not detect your face. Please try again.</p>
+		
+		<video [hidden]="isProcessingImage" autoplay #videoplayer></video>
+
+		<ion-spinner [hidden]="!isProcessingImage"></ion-spinner>
+
+		<button [hidden]="isProcessingImage" class="klm-button" (click)="processFrame()">Check In</button>
 	</div>
 	
 	<ng-template #isCheckingInView>
