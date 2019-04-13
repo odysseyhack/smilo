@@ -1,6 +1,6 @@
 ---
 # apps.yml
-- hosts: test
+- hosts: services
   pre_tasks:
     - include_vars: "../vars/{{ env }}.yml"
       tags:
