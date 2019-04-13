@@ -16,7 +16,6 @@ export class FaceVectorProvider {
         await faceapi.nets.ssdMobilenetv1.loadFromUri('./assets/models');
         await faceapi.nets.faceLandmark68Net.loadFromUri('./assets/models');
         await faceapi.nets.faceRecognitionNet.loadFromUri('./assets/models');
-        await faceapi.nets.faceExpressionNet.loadFromUri('./assets/models');
     }
 
     /**
@@ -24,14 +23,14 @@ export class FaceVectorProvider {
      * @param input 
      */
     async startFaceAnalysis(input: HTMLImageElement | HTMLVideoElement): Promise<IFaceScanResult> {
-        const faceScan = await faceapi.detectSingleFace(input).withFaceExpressions().withFaceLandmarks().withFaceDescriptor();
+        const faceScan = await faceapi.detectSingleFace(input).withFaceLandmarks().withFaceDescriptor();
         if(!faceScan || !faceScan.detection)
             return null;
 
         const result: IFaceScanResult = {
             confidence: faceScan.detection.score,
             vectors: faceScan.descriptor,
-            expressions: faceScan.expressions
+            expressions: null
         };
 
         return result;
