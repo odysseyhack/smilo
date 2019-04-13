@@ -21,12 +21,30 @@
 		</div>
 	</div>
 
-	<div class="video-container" *ngIf="!faceScan">
+	<div class="video-container" *ngIf="!isCheckingIn; else isCheckingInView">
 		<span>We are scanning your face. Hang on...</span>
 		
 		<video autoplay width="300" height="400" #videoplayer></video>
 
 		<ion-spinner></ion-spinner>
 	</div>
+	
+	<ng-template #isCheckingInView>
+		<div class="checking-loader" *ngIf="!checkingError; else checkingErrorView">
+			<span>Hang on... We are finishing your check in.</span>
+
+			<ion-spinner></ion-spinner>
+		</div>
+
+		<ng-template #checkingErrorView>
+			<div class="error-view">
+				<span>Something went wrong and we could not check in.</span>
+	
+				<button class="klm-button" (click)="processCheckIn()">
+					Try again
+				</button>
+			</div>
+		</ng-template>
+	</ng-template>
 </ion-content>
 	
