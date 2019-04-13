@@ -17,7 +17,20 @@ export class ContractProvider {
     private web3: Web3;
     private contractAddress: string;
     private initialized: boolean;
-    private sharedWith = [ 'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=', 'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=', 'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=', 'ITWEZCbs3DGB4l0TZ1LbIJ2tBRGpizTmVvzksTZZTE4=', 'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' ];
+    private sharedWithDeploy = [ 
+        'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=',
+        'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=',
+        'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=',
+        'ITWEZCbs3DGB4l0TZ1LbIJ2tBRGpizTmVvzksTZZTE4=',
+        'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' 
+    ];
+
+    private sharedWithUpdate = [ 
+        'NUK/bcNCE91Ijf9vlvbZQUrxQ9j/LZxe2eFan29nRG8=',
+        'aRwxWoSsaPTZa0f4RZhU6IWMyyAM20fxQgx7PXyodEM=',
+        'rA3MNKuWmW/Fng1NSl5p8BhBCy0psoUG9pgH/IwM+A8=',
+        'CiGtWnwyU4MY8AO/mrTt3Gv7ajic5DdnLTVqjhX13VU=' 
+    ];
 
     constructor(
         private walletProvider: WalletProvider,
@@ -41,7 +54,7 @@ export class ContractProvider {
     }
 
     connectToWeb3Provider() {
-        this.web3 = new Web3("http://node1.klm.smilo.network:22000");
+        this.web3 = new Web3("http://node0.klm.smilo.network:22000");
     }
 
     isInitialized(): boolean {
@@ -96,7 +109,7 @@ export class ContractProvider {
             from: this.walletProvider.getPublicKey(),
             gas: '4000000',
             gasPrice: '0',
-            sharedWith: this.sharedWith
+            sharedWith: this.sharedWithDeploy
         }).on('error', (error) => {
             console.log(`Error deploying contract ${error}`);
         }).on('transactionHash', (transactionHash) => {
@@ -116,15 +129,16 @@ export class ContractProvider {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
         let vectors = "[" + this.identityProvider.getIdentity().faceVectors + "]";
-        console.log('vectors:', vectors);
-        console.log('priv:', this.walletProvider.getPrivateKey());
+        console.log('setVectors this.contractAddress:', this.contractAddress);
+        console.log('setVectors vectors:', vectors);
+        console.log('setVectors priv:', this.walletProvider.getPrivateKey());
         return flightpassContract.methods.setVectors(
             vectors
         ).send({
             from: this.walletProvider.getPublicKey(),
             gas: '2000000',
             gasPrice: '0',
-            sharedWith: this.sharedWith
+            sharedWith: this.sharedWithUpdate
         });
     }
 
@@ -159,7 +173,7 @@ export class ContractProvider {
             from: this.walletProvider.getPublicKey(),
             gas: '2000000',
             gasPrice: '0',
-            sharedWith: this.sharedWith
+            sharedWith: this.sharedWithUpdate
         }, (error, result) => {
             console.log('addTrusted error:', error);
             console.log('addTrusted result:', result);
