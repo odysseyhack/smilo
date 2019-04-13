@@ -26,7 +26,7 @@ export class AuthProvider {
 
     async isAllowed(faceVectors: Float32Array) {
         return this.http.post(
-            `http://${ this.endPoint }/identities/biometrics`,
+            `https://${ this.endPoint }/identities/biometrics`,
             {
                 biometrics: Array.prototype.slice.call(faceVectors)
             }

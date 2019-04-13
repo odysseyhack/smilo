@@ -4,16 +4,16 @@ $(aws ecr get-login --no-include-email --region eu-west-1)
 
 npm i
 
-GATE_TYPE="Gate 1" NODE_ENDPOINT=node1.klm.smilo.network:3000 ionic build
+GATE_TYPE="Gate 1" NODE_ENDPOINT=node1.klm.smilo.network:444 ionic build
 docker build -t klm/gate:node1 -t klm/gate:latest .
 
-GATE_TYPE="Gate 2" NODE_ENDPOINT=node2.klm.smilo.network:3000 ionic build
+GATE_TYPE="Gate 2" NODE_ENDPOINT=node2.klm.smilo.network:444 ionic build
 docker build -t klm/gate:node2 -t klm/gate:latest .
 
-GATE_TYPE="Gate 3" NODE_ENDPOINT=node3.klm.smilo.network:3000 ionic build
+GATE_TYPE="Gate 3" NODE_ENDPOINT=node3.klm.smilo.network:444 ionic build
 docker build -t klm/gate:node3 -t klm/gate:latest .
 
-GATE_TYPE="Gate 4" NODE_ENDPOINT=node4.klm.smilo.network:3000 ionic build
+GATE_TYPE="Gate 4" NODE_ENDPOINT=node4.klm.smilo.network:444 ionic build
 docker build -t klm/gate:node4 -t klm/gate:latest .
 
 # Tag for upload to Amazon

@@ -49,7 +49,7 @@ export class CreateEPassportPage {
 	}
 	
 	getPreferredCameraSide(): string {
-		return this.isMobile() ? "back" : "front";
+		return "back";
 	}
 
 	prepareVideoPlayer() {
