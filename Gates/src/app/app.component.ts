@@ -22,9 +22,12 @@ export class MyApp {
 		let nodeEndpoint = process.env.NODE_ENDPOINT;
 		if(!nodeEndpoint)
 			throw new Error("No NODE_ENDPOINT defined as startup parameter.");
+		let distanceTreshold = Number(process.env.DISTANCE_TRESHOLD);
 
 		this.titleProvider.setTitle(gate);
 		this.authProvider.setEndPoint(nodeEndpoint);
+		if(!isNaN(distanceTreshold))
+			this.authProvider.setDistanceTreshold(distanceTreshold);
 
 	}
 }
