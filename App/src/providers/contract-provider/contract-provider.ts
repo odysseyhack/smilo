@@ -131,7 +131,6 @@ export class ContractProvider {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
         let vectors = "[" + this.identityProvider.getIdentity().faceVectors + "]";
-        console.log('vectors:', vectors);
         return flightpassContract.methods.setVectors(
             vectors
         ).send({
