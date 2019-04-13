@@ -203,6 +203,24 @@
 			{
 				"name": "passport",
 				"type": "string"
+			},
+			{
+				"components": [
+					{
+						"name": "trustedAddress",
+						"type": "address"
+					},
+					{
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"name": "isValue",
+						"type": "bool"
+					}
+				],
+				"name": "trustedlist",
+				"type": "tuple[]"
 			}
 		],
 		"payable": false,

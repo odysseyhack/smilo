@@ -74,8 +74,10 @@ export class GateControlPage implements OnInit, OnDestroy {
 	async processFrame() {
 		const faceScan = await this.faceVectorProvider.startFaceAnalysis(this.videoPlayer.nativeElement);
 
-		if(faceScan && this.hasFace(faceScan) && this.isHappy(faceScan)) {
-            this.faceScan = faceScan;
+		if(faceScan && this.hasFace(faceScan) && this.isHappy(faceScan)) {			
+			this.faceScan = faceScan;
+			
+			console.log('this.faceScan:', this.faceScan);
             
             this.state = "processing";
             

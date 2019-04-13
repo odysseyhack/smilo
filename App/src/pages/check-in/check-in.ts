@@ -96,8 +96,6 @@ export class CheckInPage implements OnDestroy, OnInit {
 
 	async processCheckIn() {
 		await this.contractProvider.setVectors();
-		await this.contractProvider.allowAllGates();
-		
 		this.bookedFlightsProvider.markBookedFlightAsCheckedIn();
 
 		this.navCtrl.push(CheckInSuccessPage);

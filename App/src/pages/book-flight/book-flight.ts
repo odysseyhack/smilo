@@ -81,7 +81,6 @@ export class BookFlightPage {
 			smartContractAddress: "0x28r1289hd921fh21fh21feh8wf8wehf8ef"
 		}
 		this.contractProvider.deployContract(bookedFlight);
-	
 		this.bookedFlightsProvider.setBookedFlight(bookedFlight);
 		this.navCtrl.push(BookSuccessPage, {bookedFlight: bookedFlight});
 	}

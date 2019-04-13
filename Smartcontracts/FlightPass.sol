@@ -25,13 +25,19 @@ contract FlightPass {
      *      address owner
      * Set owner to address owner
      */
-    constructor(string memory name, address owner, string memory ticket, string memory flight, string memory passport) public {
+    constructor(string memory name, address owner, string memory ticket, string memory flight, string memory passport, trusted[] memory trustedlist) public {
         _name = name;
         _owner = owner;
         _ticket = ticket;
         _flight = flight;
         _passport = passport;
         emit OwnershipTransferred(address(0), _owner);
+        for (uint i=0; i < trustedlist.length; i++) {
+            var obj = trustedlist[i];
+            _trusted[obj.trustedAddress].trustedAddress = obj.trustedAddress;
+            _trusted[obj.trustedAddress].name = obj.name;
+            _trusted[obj.trustedAddress].isValue = obj.isValue;
+        }
     }
     
     /**

@@ -88,9 +88,20 @@ export class ContractProvider {
         let identity = this.identityProvider.getIdentity();
         let name = identity.fullName;
         let passport = identity.passport;
+        let trustedArray: ITrusted[] = [];
+        trustedArray.push(<ITrusted>{name: "KLM Server", trustedAddress: "0x170ce250de1be1f83bbe5d24604538c9619bc02a", isValue: true});
+        trustedArray.push(<ITrusted>{name: "Gate 1", trustedAddress: "0xd4e88d6eb5012a58be7db508136e955d86227353", isValue: true});
+        trustedArray.push(<ITrusted>{name: "Gate 2", trustedAddress: "0xa984718e409cfbd2a054b411836411334bb6b625", isValue: true});
+        trustedArray.push(<ITrusted>{name: "Gate 4", trustedAddress: "0x6e9c44496220948787ff74e715128a7e1258b5a5", isValue: true});
+
+        console.log('deployContract name:', name);
+        console.log('deployContract this.walletProvider.getPublicKey():', this.walletProvider.getPublicKey());
+        console.log('deployContract ticket:', ticket);
+        console.log('deployContract flight:', flight);
+        console.log('deployContract passport:', passport);
 
         let flightpassContract = new this.web3.eth.Contract(abi);
-        flightpassContract.deploy(
+        return flightpassContract.deploy(
             {
                 data: '0x' + bytecode,
                 arguments: [
@@ -98,7 +109,8 @@ export class ContractProvider {
                     this.walletProvider.getPublicKey(),
                     ticket,
                     flight,
-                    passport
+                    passport,
+                    trustedArray
                 ]
             }
         ).send({
@@ -125,6 +137,7 @@ export class ContractProvider {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
         let vectors = "[" + this.identityProvider.getIdentity().faceVectors + "]";
+        console.log('vectors:', vectors);
         return flightpassContract.methods.setVectors(
             vectors
         ).send({
@@ -183,14 +196,14 @@ export class ContractProvider {
         return Promise.all(deleteArray);
     }
 
-    async allowAllGates() {
-        let trustedArray: ITrusted[] = [];
-        trustedArray.push(<ITrusted>{name: "KLM Server", trustedAddress: "0x170ce250de1be1f83bbe5d24604538c9619bc02a", isValue: true});
-        trustedArray.push(<ITrusted>{name: "Gate 1", trustedAddress: "0xd4e88d6eb5012a58be7db508136e955d86227353", isValue: true});
-        trustedArray.push(<ITrusted>{name: "Gate 2", trustedAddress: "0xa984718e409cfbd2a054b411836411334bb6b625", isValue: true});
-        trustedArray.push(<ITrusted>{name: "Gate 4", trustedAddress: "0x6e9c44496220948787ff74e715128a7e1258b5a5", isValue: true});
-        await this.addTrusted(trustedArray);
-    }
+    // async allowAllGates() {
+    //     let trustedArray: ITrusted[] = [];
+    //     trustedArray.push(<ITrusted>{name: "KLM Server", trustedAddress: "0x170ce250de1be1f83bbe5d24604538c9619bc02a", isValue: true});
+    //     trustedArray.push(<ITrusted>{name: "Gate 1", trustedAddress: "0xd4e88d6eb5012a58be7db508136e955d86227353", isValue: true});
+    //     trustedArray.push(<ITrusted>{name: "Gate 2", trustedAddress: "0xa984718e409cfbd2a054b411836411334bb6b625", isValue: true});
+    //     trustedArray.push(<ITrusted>{name: "Gate 4", trustedAddress: "0x6e9c44496220948787ff74e715128a7e1258b5a5", isValue: true});
+    //     await this.addTrusted(trustedArray);
+    // }
 
     save() {
         this.accountProvider.encryptToStorage(CONTRACT_ADDRESS_KEY, this.contractAddress);
