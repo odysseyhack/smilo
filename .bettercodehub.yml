@@ -4,8 +4,12 @@ languages:
 exclude:
 - /Deploymentscripts/
 - /Smartcontracts/
-- /App/src/smartcontracts/smartcontracts.ts
+- /App/src/node_modules/
 - /App/www/
+- /App/src/smartcontracts/smartcontracts.ts
 - /App/src/providers/contract-provider/contract-provider.ts
-- /App/src/app/app.component.ts
 - /App/src/components/components-menu-bar/components-menu-bar.ts
+- /App/src/app/app.component.ts
+- /App/src/mocks/
+- /Gates/src/node_modules/
+- /Gates/www/
