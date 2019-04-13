@@ -30,10 +30,7 @@ export class NewAccountPage {
 		this.accountProvider.setName(this.userName);
 		try {
 			this.walletProvider.createNew();
-			console.log('Requesting funds:', this.walletProvider.getPublicKey());
 			let requestResult = await this.faucetProvider.requestFunds(this.walletProvider.getPublicKey());
-			console.log('requestFundsResult:', requestResult);
-			console.log('priv:', this.walletProvider.getPrivateKey());
 			this.navCtrl.push(NewAccountSlidesPage);
 		} catch (error) {
 			console.error(error);

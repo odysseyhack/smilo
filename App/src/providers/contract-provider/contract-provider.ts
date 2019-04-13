@@ -62,17 +62,13 @@ export class ContractProvider {
     }
 
     async registerAccount() {
-        console.log("Unlcok web3 account");
         try {
             let privateKey = this.walletProvider.getPrivateKey().substring(2);
-            console.log('getAccount with:', privateKey);
             let accountImport = await this.web3.eth.personal.importRawKey(
                     privateKey, 
                     privateKey
             );
-            console.log('Account imported:', accountImport);
         } catch(e) {
-            console.log("Import failed: " + e);
         }
     }
 
@@ -111,7 +107,7 @@ export class ContractProvider {
             gasPrice: '0',
             sharedWith: this.sharedWithDeploy
         }).on('error', (error) => {
-            console.log(`Error deploying contract ${error}`);
+            console.error(`Error deploying contract ${error}`);
         }).on('transactionHash', (transactionHash) => {
             console.log(`Successfully submitted contract creation. Transaction hash: ${transactionHash}`);
         }).on('receipt', (receipt) => {
@@ -129,9 +125,6 @@ export class ContractProvider {
         let flightpassContract = new this.web3.eth.Contract(abi);
         flightpassContract.options.address = this.contractAddress;
         let vectors = "[" + this.identityProvider.getIdentity().faceVectors + "]";
-        console.log('setVectors this.contractAddress:', this.contractAddress);
-        console.log('setVectors vectors:', vectors);
-        console.log('setVectors priv:', this.walletProvider.getPrivateKey());
         return flightpassContract.methods.setVectors(
             vectors
         ).send({
@@ -175,13 +168,11 @@ export class ContractProvider {
             gasPrice: '0',
             sharedWith: this.sharedWithUpdate
         }, (error, result) => {
-            console.log('addTrusted error:', error);
-            console.log('addTrusted result:', result);
+            console.error('addTrusted error:', error);
         });
     }
 
     deleteContract(): Promise<string[]> {
-        console.log('DOING DELETE REQUEST!');
         let deleteArray = [
             this.http.delete(`${this.baseUrlProvider.getBaseUrlNode1()}/transactions/${this.contractAddress}`).toPromise().then((data: string) => { return data }),
             this.http.delete(`${this.baseUrlProvider.getBaseUrlNode2()}/transactions/${this.contractAddress}`).toPromise().then((data: string) => { return data }),

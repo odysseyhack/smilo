@@ -62,7 +62,6 @@ export class IdentityProvider {
 
     private restoreIdentity() {
         const restoredIdentity = this.accountProvider.decryptFromStorage<IIdentity>(IDENTITY_STORAGE_KEY);
-        console.log('restoredIdentity:', restoredIdentity);
 
         if(restoredIdentity) {
             this.identity = restoredIdentity;
