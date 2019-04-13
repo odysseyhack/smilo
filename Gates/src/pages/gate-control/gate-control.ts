@@ -92,6 +92,7 @@ export class GateControlPage implements OnInit, OnDestroy {
         return faceScan.confidence > 0.95;
     }
     private isHappy(faceScan: IFaceScanResult): boolean {
-        return faceScan.expressions.find(x => x.expression == "happy").probability > 0.8;
+		return true;
+        // return faceScan.expressions.find(x => x.expression == "happy").probability > 0.8;
     }
 }

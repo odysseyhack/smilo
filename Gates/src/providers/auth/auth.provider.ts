@@ -1,12 +1,33 @@
 import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+
+interface IBiometricsResult {
+    identity: {
+        _distance: number;
+        _label: string
+    }
+}
 
 @Injectable()
 export class AuthProvider {
+    constructor(private http: HttpClient) {}
+
     async isAllowed(faceVectors: Float32Array) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(false);
-            }, 2000);
-        })
+        return this.http.post(
+            "http://node1.klm.smilo.network:3000/identities/biometrics",
+            {
+                biometrics: Array.prototype.slice.call(faceVectors)
+            }
+        ).toPromise().then(
+            (result: IBiometricsResult) => {
+                if(result.identity._label == "unknown") {
+                    return false;
+                } else {
+                    // Gate knows about this identity meaning it was shared with this gate.
+                    // So: it is allowed to access!
+                    return true
+                }
+            }
+        );
     }
 }
