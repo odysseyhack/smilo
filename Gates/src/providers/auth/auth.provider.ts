@@ -12,7 +12,7 @@ interface IBiometricsResult {
 export class AuthProvider {
     private endPoint: string;
 
-    private distanceTreshold = 0.3;
+    private distanceTreshold = 0.6;
 
     constructor(private http: HttpClient) {}
 
