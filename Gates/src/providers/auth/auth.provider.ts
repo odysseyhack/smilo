@@ -10,11 +10,17 @@ interface IBiometricsResult {
 
 @Injectable()
 export class AuthProvider {
+    private endPoint: string;
+
     constructor(private http: HttpClient) {}
+
+    setEndPoint(endPoint: string) {
+        this.endPoint = endPoint;
+    }
 
     async isAllowed(faceVectors: Float32Array) {
         return this.http.post(
-            "http://node1.klm.smilo.network:3000/identities/biometrics",
+            `http://${ this.endPoint }/identities/biometrics`,
             {
                 biometrics: Array.prototype.slice.call(faceVectors)
             }
