@@ -1,0 +1,30 @@
+<ion-content [ngClass]="{'red': state == 'denied', 'orange': state == 'processing', 'green': state == 'allowed'}">
+    <components-top-bar publicKey="{{ publicKey }}"></components-top-bar>
+    <div class="main-middle-container" >
+        <div (click)="manualPhoto()" class="camera-title"
+            [ngSwitch]="state">
+            <p *ngSwitchCase="'default'">
+                Please stand in front of the camera
+            </p>
+
+            <p *ngSwitchCase="'processing'">
+                We are processing your face
+            </p>
+
+            <p *ngSwitchCase="'denied'">
+                You are not allowed to enter this gate
+            </p>
+
+            <p *ngSwitchCase="'allowed'">
+                Welcome! Please continue through the gate.
+            </p>
+        </div>
+
+        <div class="camera-container">
+            <div id="container">
+                <video autoplay #videoplayer></video>
+            </div>
+        </div>
+    </div>
+    <components-bottom-bar></components-bottom-bar>
+</ion-content>

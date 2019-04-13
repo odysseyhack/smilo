@@ -1,0 +1,155 @@
+page-gate-control {
+
+    ion-content {
+        .scroll-content {
+            background-color: #00B0FE;
+            transition: background-color 0.5s ease;
+        }
+
+        &.red {
+            .scroll-content {
+                background-color: #e00034 !important;
+            }
+        }
+    
+        &.orange {
+            .scroll-content {
+                background-color: #e37222 !important;
+            }
+        }
+    
+        &.green {
+            .scroll-content {
+                background-color: #5ba618 !important;
+            }
+        }
+    }
+
+	.main-middle-container {
+		display: flex;
+        justify-content: center;
+       
+	}
+
+	.camera-title {
+		border: 1px solid white;
+		border-radius: 30px;
+		color: white;
+		font-weight: 700;
+		font-size: 20px;
+		text-align: center;
+		position: absolute;
+		background-color: rgba(0,176,254,0.2);
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+		bottom: 100px;
+		width: 600px;
+		z-index: 10;
+	}
+	
+	.cam-info {
+		font-size: 18px;
+		max-width: 530px;
+		color: white;
+		text-align: center;
+	}
+
+	canvas {
+		width: 320px !important;
+		height: 480px !important;
+	}
+
+	.qr-scanner-video {
+		div {
+			video {
+				height: calc(100vh - 150px) !important;
+				width: inherit !important;
+			}
+		}
+	}
+
+	#videoel {
+		height: calc(100vh - 150px);
+		width: inherit;
+	}
+
+	#container {
+		position: relative;
+	}
+
+	#fade-it {
+		padding: 15px;
+		text-align: center;
+	}
+
+	@-webkit-keyframes yellow-fade {
+		from {
+			opacity: 1.0;
+		}
+		to {
+			opacity: 0.1;
+		}
+	}
+
+	@-moz-keyframes yellow-fade {
+		from {
+			opacity: 1.0;
+		}
+		to {
+			opacity: 0.1;
+		}
+	}
+
+	@keyframes yellow-fade {
+		from {
+			opacity: 1.0;
+		}
+		to {
+			opacity: 0.1;
+		}
+	}
+
+	.flash-camera {
+		-webkit-animation: yellow-fade 1s ease-in-out 0s;
+		-moz-animation: yellow-fade 1s ease-in-out 0s;
+		-o-animation: yellow-fade 1s ease-in-out 0s;
+		animation: yellow-fade 1s ease-in-out 0s;
+	}
+
+	.camera-flash-container {
+		height: calc(100vh - 150px);
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: white;
+		opacity: 0.0;
+	}
+
+	.address-container {
+		color: white;
+		text-align: center;
+
+		p {
+			span {
+				font-style: italic;
+			}
+		}
+	}
+
+	@media (max-width: 800px) {
+		.camera-title {
+			width: inherit;
+			margin-left: 24px;
+			margin-right: 24px;
+		}
+
+		.center-container {
+			position: inherit;
+			width: inherit;
+			margin-left: 8px;
+		}
+	}
+}
