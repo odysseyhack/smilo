@@ -94,12 +94,6 @@ export class ContractProvider {
         trustedArray.push(<ITrusted>{name: "Gate 2", trustedAddress: "0xa984718e409cfbd2a054b411836411334bb6b625", isValue: true});
         trustedArray.push(<ITrusted>{name: "Gate 4", trustedAddress: "0x6e9c44496220948787ff74e715128a7e1258b5a5", isValue: true});
 
-        console.log('deployContract name:', name);
-        console.log('deployContract this.walletProvider.getPublicKey():', this.walletProvider.getPublicKey());
-        console.log('deployContract ticket:', ticket);
-        console.log('deployContract flight:', flight);
-        console.log('deployContract passport:', passport);
-
         let flightpassContract = new this.web3.eth.Contract(abi);
         return flightpassContract.deploy(
             {

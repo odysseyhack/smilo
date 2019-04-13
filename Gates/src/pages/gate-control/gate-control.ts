@@ -76,8 +76,6 @@ export class GateControlPage implements OnInit, OnDestroy {
 
 		if(faceScan && this.hasFace(faceScan) && this.isHappy(faceScan)) {			
 			this.faceScan = faceScan;
-			
-			console.log('this.faceScan:', this.faceScan);
             
             this.state = "processing";
             

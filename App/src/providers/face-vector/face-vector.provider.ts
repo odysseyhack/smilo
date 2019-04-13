@@ -12,9 +12,11 @@ export class FaceVectorProvider {
      * Initializes the FaceVectorProvider by loading neural network models.
      */
     async initialize() {
-        await faceapi.nets.ssdMobilenetv1.loadFromUri('./assets/models');
-        await faceapi.nets.faceLandmark68Net.loadFromUri('./assets/models');
-        await faceapi.nets.faceRecognitionNet.loadFromUri('./assets/models');
+        return Promise.all([
+            faceapi.nets.ssdMobilenetv1.loadFromUri('./assets/models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('./assets/models'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('./assets/models')
+        ]);
     }
 
     /**

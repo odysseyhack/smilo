@@ -26,6 +26,9 @@ export class CheckInPage implements OnDestroy, OnInit {
 
 	public booking: IBookedFlight;
 
+	public isCheckingIn: boolean;
+	public checkingError: string;
+
 	constructor(
 		private navCtrl: NavController,
 		private faceVectorProvider: FaceVectorProvider,
@@ -33,15 +36,21 @@ export class CheckInPage implements OnDestroy, OnInit {
 		private bookedFlightsProvider: BookedFlightsProvider,
 		private contractProvider: ContractProvider
 	) {
-
+		
 	}
 
 	async ngOnInit() {
 		this.booking = this.bookedFlightsProvider.getBookedFlight();
 
-		await this.faceVectorProvider.initialize();
-		
-		await this.startVideo();
+		setTimeout(async () => {
+			await this.startVideo();
+	
+			await this.faceVectorProvider.initialize();
+	
+			setTimeout(() => {
+				this.scheduleNextFrameToProcess()
+			}, 1000);
+		}, 1000);
 	}
 
 	ngOnDestroy() {
@@ -58,8 +67,6 @@ export class CheckInPage implements OnDestroy, OnInit {
 		this.stream = await navigator.mediaDevices.getUserMedia(constraints);
 
 		video.srcObject = this.stream;
-
-		this.scheduleNextFrameToProcess();
 	}
 
 	stopVideo() {
@@ -88,16 +95,28 @@ export class CheckInPage implements OnDestroy, OnInit {
 
 			this.stopVideo();
 
-			await this.processCheckIn();
+			this.processCheckIn();
 		} else {
 			this.scheduleNextFrameToProcess();
 		}
 	}
 
 	async processCheckIn() {
-		await this.contractProvider.setVectors();
-		this.bookedFlightsProvider.markBookedFlightAsCheckedIn();
+		this.checkingError = null;
+		try {
+			this.isCheckingIn = true;
 
+			await this.contractProvider.setVectors();
+			
+			this.bookedFlightsProvider.markBookedFlightAsCheckedIn();
+
+			this.isCheckingIn = false;
+		}
+		catch(ex) {
+			this.checkingError = ex;
+			return;
+		}
+		
 		this.navCtrl.push(CheckInSuccessPage);
 	}
 }

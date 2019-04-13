@@ -42,9 +42,7 @@ export class ComponentsMenuBarComponent {
     
     deleteSmartContract() {
         this.isDeleting = true;
-		console.log('Delete smart contract!')
 		this.contractProvider.deleteContract().then(data => {
-            console.log('Delete success:', data);
             this.clearWholeLocalStorage();
 		}).catch(error => {
 			console.log('Delete failed:', error);
@@ -52,7 +50,6 @@ export class ComponentsMenuBarComponent {
     }
     
     clearWholeLocalStorage() {
-        console.log('Clearing whole local storage!');
         this.storageProvider.deleteEverything();
         this.navController.setRoot(HomePage);
         this.isDeleting = false;
