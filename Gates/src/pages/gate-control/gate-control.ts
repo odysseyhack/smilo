@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from "@angular/co
 import { FaceVectorProvider, IFaceScanResult } from "../../providers/face-vector/face-vector.provider";
 import { AuthProvider } from "../../providers/auth/auth.provider";
 
-declare type ScanState = "default" | "processing" | "allowed" | "denied";
+declare type ScanState = "loading" | "default" | "processing" | "allowed" | "denied";
 
 @Component({
     selector: 'page-gate-control',
@@ -19,7 +19,7 @@ export class GateControlPage implements OnInit, OnDestroy {
 
     public faceScan: IFaceScanResult;
     
-    public state: ScanState = "default";
+    public state: ScanState = "loading";
 
     constructor(
         private faceVectorProvider: FaceVectorProvider,
@@ -49,7 +49,10 @@ export class GateControlPage implements OnInit, OnDestroy {
 
 		video.srcObject = this.stream;
 
-		this.scheduleNextFrameToProcess(true);
+		setTimeout(() => {
+			this.state = "default";
+			this.scheduleNextFrameToProcess();
+		}, 10000);
 	}
 
 	stopVideo() {
@@ -62,10 +65,10 @@ export class GateControlPage implements OnInit, OnDestroy {
 		}
 	}
 
-	scheduleNextFrameToProcess(longTimeout = false) {
+	scheduleNextFrameToProcess() {
 		this.timeoutId = setTimeout(async () => {
 			this.processFrame();
-		}, longTimeout ? 1000 : 100);
+		}, 100);
 	}
 
 	async processFrame() {
