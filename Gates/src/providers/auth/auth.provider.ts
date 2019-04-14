@@ -45,4 +45,12 @@ export class AuthProvider {
             }
         );
     }
+
+    async getIdentityCount(): Promise<number> {
+        return this.http.get(
+            `https://${ this.endPoint }/identities/count`
+        ).toPromise().then(
+            (result: any) => result.count
+        );
+    }
 }

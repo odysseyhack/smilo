@@ -43,7 +43,7 @@ export class GateControlPage implements OnInit, OnDestroy {
 			video: true
 		};
 
-		const video = this.videoPlayer.nativeElement;
+		const video: HTMLVideoElement = this.videoPlayer.nativeElement;
 
 		this.stream = await navigator.mediaDevices.getUserMedia(constraints);
 
